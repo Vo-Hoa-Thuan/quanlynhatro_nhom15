@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">QuanLyNhaTro_Nhom15</string>
+
+
+    <string name="dang_nhap">Đăng Nhập</string>
+    <string name="dang_ky">Đăng Ký</string>
+    <string name="cap_nhat">Cập Nhật Thông Tin</string>
+    <string name="them_moi_khu_tro">Thêm Mới Khu Trọ</string>
+    <string name="them_phong">Thêm Phòng</string>
+    <string name="tao_hoa_don">Tạo Hóa Đơn</string>
+    <string name="tao_hop_dong">Lập Hợp Đồng Mới</string>
+    <string name="cap_nhat_hop_dong">Cập Nhật Hợp Đồng</string>
+    <string name="danh_sach_phong">Danh sách phòng</string>
+    <string name="danh_sach_phong_chua_dong_tien">Danh sách phòng</string>
+    <string name="danh_sach_phong_sap_het_hop_dong">Danh Sách Phòng</string>
+    <string name="danh_sach_phong_da_coc_giu_cho">Danh Sách Phòng</string>
+    <string name="danh_sach_phong_can_tao_hop_dong">Tạo Hợp Đồng</string>
+    <string name="danh_sach_nguoi_thue">Danh Sách Người Thuê</string>
+    <string name="danh_sach_phong_chua_tao_hoa_don">Danh sách phòng</string>
+    <string name="danh_sach_hoa_don">Danh Sách Hóa Đơn</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chi_tiet_phong">Chi tiết phòng</string>
+    <string name="them_phong_tro">Thêm phòng trọ</string>
+    <string name="quan_ly_dich_vu">Quản lý dịch vụ</string>
+    <string name="them_ly_dich_vu">Thêm Dịch Vụ</string>
+</resources>

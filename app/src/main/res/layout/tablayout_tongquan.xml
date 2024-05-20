@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mauNenApp"
+    android:layout_marginBottom="5dp">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:background="@drawable/boder_tron_colorwhite"
+           android:layout_marginTop="3dp"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp">
+           <LinearLayout
+               style="@style/line_tonquan">
+               <TextView
+                   style="@style/tv_TieuDe_tongquan"
+                   android:text="Thống kê khu trọ"
+                   />
+               <TextView
+                   style="@style/tv_soLuong_tongquan"
+                   android:text="Khu A"
+                   android:id="@+id/tvTenKhuTongQuan"
+                   />
+           </LinearLayout>
+           <LinearLayout
+               style="@style/line_tonquan"
+               >
+               <TextView
+                   style="@style/tv_TieuDe_tongquan"
+                   android:text="Tổng số phòng"
+                   />
+               <TextView
+                   style="@style/tv_soLuong_tongquan"
+                   android:id="@+id/tvSoPhongTongQuan"
+                   android:text="30"
+                   />
+           </LinearLayout>
+       </LinearLayout>
+       <TextView
+           style="@style/textView_Tieude"
+           android:text="Tổng quan phòng"
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textStyle="italic"
+           android:layout_marginLeft="10dp"
+           android:textSize="17dp"
+           android:text="Tổng quan phòng đang cho thuê"
+           />
+       <GridLayout
+           android:layout_marginTop="5dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:columnCount="2"
+           android:rowCount="2">
+
+           <LinearLayout
+               android:id="@+id/phongTrong"
+               style="@style/Tablayout_Linner">
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+                   <ImageView
+                       style="@style/image_tabLayout"
+                       android:src="@drawable/icon_homered_tq" />
+                   <TextView
+                       android:id="@+id/tvPhongTrong"
+                       style="@style/textView_tabLayout"
+                       android:textSize="40dp"
+                       android:paddingLeft="20dp"
+                       android:text="5"
+                       />
+               </LinearLayout>
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:text="Số phòng đang trống"
+                   />
+           </LinearLayout>
+
+
+           <LinearLayout
+               android:id="@+id/phongDangChoThue"
+               style="@style/Tablayout_Linner"
+               >
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+                   <ImageView
+                       style="@style/image_tabLayout"
+                       android:src="@drawable/icon_homegreen_tq" />
+                   <TextView
+                       android:id="@+id/tvPhongDangThue"
+                       style="@style/textView_tabLayout"
+                       android:textSize="40dp"
+                       android:paddingLeft="20dp"
+                       android:text="25"
+                       />
+               </LinearLayout>
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:text="Số phòng đang thuê" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/phongSapHetHan"
+               style="@style/Tablayout_Linner"
+               android:layout_marginTop="10dp">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+                   <ImageView
+                       style="@style/image_tabLayout"
+                       android:src="@drawable/icon_oclock_tq" />
+                   <TextView
+                       android:id="@+id/tvPhongSapHetHanHD"
+                       style="@style/textView_tabLayout"
+                       android:textSize="40dp"
+                       android:paddingLeft="20dp"
+                       android:text="25"
+                       />
+               </LinearLayout>
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:text="Số phòng sắp hết hợp đồng" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/phongChuaDongTien"
+               style="@style/Tablayout_Linner"
+               android:layout_marginTop="10dp">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+                   <ImageView
+                       style="@style/image_tabLayout"
+                       android:src="@drawable/icon_price_tq" />
+                   <TextView
+                       android:id="@+id/sl_PhongChuaDongTien"
+                       style="@style/textView_tabLayout"
+                       android:textSize="40dp"
+                       android:paddingLeft="20dp"
+                       android:text="25"
+                       />
+               </LinearLayout>
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:text="Số phòng chưa đóng tiền" />
+           </LinearLayout>
+       </GridLayout>
+
+
+       <TextView
+           style="@style/textView_Tieude"
+           android:text="Thống kê tài chính"
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textStyle="italic"
+           android:layout_marginLeft="10dp"
+           android:textSize="17dp"
+           android:text="Thống kê các loại tiền quản lý"
+           />
+       <LinearLayout
+           android:id="@+id/doanhThu"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="10dp"
+           android:layout_marginLeft="15dp"
+           android:orientation="horizontal"
+           android:background="@drawable/boder_tron_colorwhite"
+           android:layout_marginRight="15dp">
+           <ImageView
+               android:layout_marginLeft="10dp"
+               android:layout_width="50dp"
+               android:layout_height="90dp"
+               android:src="@drawable/icon_doangthu"
+               />
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:gravity="center">
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:paddingTop="10dp"
+                   android:text="Doanh thu"
+                   />
+               <TextView
+                   style="@style/textView_tabLayout"
+                   android:textSize="18dp"
+                   android:hint="Tổng số tiền theo tháng"
+
+                   />
+           </LinearLayout>
+           <ImageView
+               android:layout_width="50dp"
+               android:layout_height="90dp"
+               android:src="@drawable/black_right"
+               />
+       </LinearLayout>
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:layout_marginTop="10dp"
+           android:background="#C6C6C6"
+           />
+   </LinearLayout>
+
+
+</ScrollView>

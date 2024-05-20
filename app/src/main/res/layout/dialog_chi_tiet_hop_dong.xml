@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="15dp"
+    android:background="@color/mauNenApp"
+
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="1dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvChiTietHopDongMaPhong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:text="#PH29166"/>
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_chitiethopdong"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvChiTietHDTenNguoiDung"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:fontFamily="@font/akaya_telivigala"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Họ Tên: Lê Tiến Thành"/>
+            <TextView
+                android:id="@+id/tvChiTietHDTenPhong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple_500"
+                android:textSize="20dp"
+                android:text="Phòng: A101"/>
+            <TextView
+                android:id="@+id/tvChiTietHDNgayHopDong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày hợp đồng: 2022-03-12"
+                android:textSize="16sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/tvChiTietHDNgayO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày ở: 2022-03-12"
+                android:textSize="16sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/tvChiTietHDThoiHan"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_height="wrap_content"
+                android:text="Thời hạn: 6 tháng"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/tvNgayLapHopDong"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_height="wrap_content"
+                android:text="Thời hạn: 6 tháng"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/tvChiTietHDTienCoc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiền cọc: 2.000.000đ"
+                android:textSize="16sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/mauDo"/>
+            <TextView
+                android:id="@+id/tvChiTietHDTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trạng thái: còn hợp đồng"
+                android:textSize="16sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnDongChiTietHopDong"
+        style="@style/button"
+        android:text="Đóng"
+        android:layout_gravity="center"/>
+</LinearLayout>

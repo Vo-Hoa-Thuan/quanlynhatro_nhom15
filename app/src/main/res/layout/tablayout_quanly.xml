@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mauNenApp"
+    android:layout_marginBottom="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/textView_Tieude"
+            android:text="Thao tác nhà trọ"
+            />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <LinearLayout
+                android:id="@+id/taoHopDong"
+                style="@style/Tablayout_Linner">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/icon_taohopdong" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Tạo hợp đồng"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quanLyDichVu"
+                style="@style/Tablayout_Linner">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/icon_dichvu"
+                    />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Dịch vụ" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/TraPhong"
+                style="@style/Tablayout_Linner"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/icon_traphong" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Xử lý hợp đồng" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/taoHoaDon"
+                style="@style/Tablayout_Linner"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/icon_taohoadon" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Tạo hóa đơn" />
+            </LinearLayout>
+        </GridLayout>
+        <TextView
+            style="@style/textView_Tieude"
+            android:text="Danh sách quản lý"
+            />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <LinearLayout
+                android:id="@+id/dsPhongThue"
+                style="@style/Tablayout_Linner">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/ds_phong" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Danh sách phòng thuê"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dsKhachThue"
+                style="@style/Tablayout_Linner">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/list_nguoi_dung" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Danh sách khách thuê" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dsHoaDon"
+                style="@style/Tablayout_Linner"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/list_hoadon" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Danh sách hóa đơn" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dsHopDong"
+                style="@style/Tablayout_Linner"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    style="@style/image_tabLayout"
+                    android:src="@drawable/list_hop_dong" />
+
+                <TextView
+                    style="@style/textView_tabLayout"
+                    android:text="Danh sách hợp đồng" />
+            </LinearLayout>
+        </GridLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#C6C6C6"
+            />
+    </LinearLayout>
+
+
+</ScrollView>

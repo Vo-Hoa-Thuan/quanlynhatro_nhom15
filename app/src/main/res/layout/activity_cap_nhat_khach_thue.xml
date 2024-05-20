@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ct07n.hcmact.quanlynhatro_nhom5.activity.ActivityCapNhatKhachThue">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbCapNhatKhachThue"
+        style="@style/toolBar"
+        app:title="Cập Nhật Khách Thuê"
+
+        />
+    <Spinner
+        android:id="@+id/spinnerSuaNguoiDung"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/lyCapNhat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:background="@drawable/boder_nen">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/lyTenPhong"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:visibility="gone"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            >-->
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/edTenPhong"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Tên phòng"-->
+<!--                android:enabled="false"-->
+<!--                android:background="@drawable/boder_tron_colorwhite"-->
+<!--                />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edHoTenSuaNguoiDung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Họ và tên"
+                android:background="@drawable/boder_tron_colorwhite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginRight="10dp"
+
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edNgaySinhSuaNguoiDung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ngày sinh"
+                android:background="@drawable/boder_tron_colorwhite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_marginRight="10dp"
+
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edSDTSuaNguoiDung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Số điện thoại"
+                android:inputType="number"
+                android:background="@drawable/boder_tron_colorwhite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edCCCDSuaNguoiDung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Số CCCD"
+                android:inputType="number"
+                android:background="@drawable/boder_tron_colorwhite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lyQueQuanSuaNguoiDung"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginRight="10dp"
+
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edQueQuanSuaNguoiDung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Quê quán"
+                android:background="@drawable/boder_tron_colorwhite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/chkTrangThaiKhachThue"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Xóa khách thuê"
+                />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnLuuSuaNguoiDung"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Lưu"/>
+        <Button
+            android:id="@+id/btnHuySuaNguoiDung"
+            android:layout_width="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_height="wrap_content"
+            android:text="Hủy"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mauNenApp"
+    android:layout_margin="5dp">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchTenPhong"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="15dp"
+        style="@style/search_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/lineaFind"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/searchTenPhong"-->
+<!--        android:orientation="horizontal">-->
+<!--        <EditText-->
+<!--            android:id="@+id/edFindTenPhong"-->
+<!--            android:layout_width="200dp"-->
+<!--            style="@style/Tablayout_Linner"-->
+<!--            android:paddingLeft="5dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:hint="Nhập tên phòng"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/btnFind"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Tìm kiếm"/>-->
+<!--    </LinearLayout>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcyNguoiDangO"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchTenPhong"
+        />
+<!--    app:layout_constraintTop_toTopOf="parent"-->
+    <ImageView
+        android:id="@+id/imgAddNguoiThue"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/img_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

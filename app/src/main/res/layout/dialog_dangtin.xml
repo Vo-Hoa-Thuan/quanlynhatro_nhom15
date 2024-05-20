@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/mauNenApp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mauChinhApp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tạo tin"
+            android:textSize="40dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:padding="3dp"
+            />
+        <ImageView
+            android:id="@+id/img_close_dangTin"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_close"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginBottom="5dp">
+        <ImageView
+            android:layout_margin="2dp"
+            android:layout_width="100dp"
+            android:layout_height="90dp"
+            android:src="@drawable/icon_avatar_"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:text="Võ Hòa Thuận"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/tichxanh"
+            />
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edTieuDe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="20dp"
+            android:hint="Tiêu đề thông báo"
+            android:textStyle="bold"
+            android:background="@color/white"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edNoiDung"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="left"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:hint="Thông báo hôm nay ?"
+            android:background="@drawable/boder_tron_colorwhite"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/btnDangTin"
+        style="@style/button"
+        android:text="Đăng tin"
+        android:background="@drawable/boder_tron"
+        android:layout_gravity="right"
+        android:layout_margin="5dp"
+        />
+
+
+
+</LinearLayout>
