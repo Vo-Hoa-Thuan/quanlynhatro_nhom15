@@ -20,4 +20,6 @@ interface HopdongApiService {
 
     @PUT("api/hopDong/{id}")
     fun updateHopDong(@Path("id") id: String, @Body hopDong: HopDong): Call<Void>
+       @GET("api/hopDong/{id}/tenNguoiDung")
+    fun getTenNguoiDungByIDHopDong(@Path("id") id: String): Call<String>
 }
