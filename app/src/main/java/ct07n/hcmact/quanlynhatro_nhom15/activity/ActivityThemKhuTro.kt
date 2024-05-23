@@ -61,14 +61,22 @@ class ActivityThemKhuTro : AppCompatActivity() {
     private fun createNewKhuTro(khuTro: KhuTro) {
         val call = khuTroApiService.insertKhuTro(khuTro)
         call.enqueue(object : Callback<Void> {
+            // Sau khi gửi yêu cầu tạo khu trọ mới thành công
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    // Giả sử bạn lưu trữ tạm thời mã khu trọ trong SharedPreferences
-                    val sharedPreferences = getSharedPreferences("temp_prefs", MODE_PRIVATE)
-                    sharedPreferences.edit().putString("latest_ma_khu_tro", khuTro.maKhuTro).apply()
+                    // Ghi nhật ký tất cả các tiêu đề phản hồi
+                    for ((key, value) in response.headers().toMultimap()) {
+                        Log.d("Header", "$key: $value")
+                    }
+                    // Lấy mã khu trọ từ bản ghi được tạo ra
+                    val maKhuTro = response.headers()["ma_khu_tro"]
 
+                    Log.d("MaKhuTro", "Ma khu tro nhan duoc: $maKhuTro")
+
+                    // Chuyển đến ActivityTaoPhongKhiThemKhu
                     val intent = Intent(this@ActivityThemKhuTro, ActivityTaoPhongKhiThemKhu::class.java)
-                    intent.putExtra(MA_KHU_TU_TAO_KHU, khuTro.maKhuTro)
+
+                    intent.putExtra(MA_KHU_TU_TAO_KHU, maKhuTro)
                     intent.putExtra(SO_LUONG_PHONG_KEY, khuTro.so_luong_phong)
                     startActivity(intent)
                     finish()
@@ -82,7 +90,6 @@ class ActivityThemKhuTro : AppCompatActivity() {
             }
         })
     }
-
 
     private fun showErrorMessage(message: String) {
         AlertDialog.Builder(this)
