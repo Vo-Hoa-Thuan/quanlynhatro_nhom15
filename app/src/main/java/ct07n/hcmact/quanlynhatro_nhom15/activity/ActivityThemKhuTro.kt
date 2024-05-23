@@ -13,6 +13,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.KhuTro
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 const val SO_LUONG_PHONG_KEY = "So_luong_phong"
 const val MA_KHU_TU_TAO_KHU = "ma_khu_khi_tao_khu"
@@ -34,11 +35,13 @@ class ActivityThemKhuTro : AppCompatActivity() {
             if (!validateInput()) {
                 showErrorMessage("Vui lòng nhập đủ thông tin!!!")
             } else {
+                val id=UUID.randomUUID().toString()
+                val ma_khu_tro = id
                 val tenKhuTro = binding.edTenKhuTro.text.toString()
                 val soLuongPhong = binding.edSoPhong.text.toString().toInt()
                 val diaChi = binding.edDiaChi.text.toString()
 
-                val newKhuTro = KhuTro(tenKhuTro, diaChi, soLuongPhong, adminUsername) // Thêm adminUsername vào đối tượng KhuTro
+                val newKhuTro = KhuTro(ma_khu_tro,tenKhuTro, diaChi, soLuongPhong, adminUsername) // Thêm adminUsername vào đối tượng KhuTro
 
                 createNewKhuTro(newKhuTro)
             }
@@ -64,19 +67,11 @@ class ActivityThemKhuTro : AppCompatActivity() {
             // Sau khi gửi yêu cầu tạo khu trọ mới thành công
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    // Ghi nhật ký tất cả các tiêu đề phản hồi
-                    for ((key, value) in response.headers().toMultimap()) {
-                        Log.d("Header", "$key: $value")
-                    }
-                    // Lấy mã khu trọ từ bản ghi được tạo ra
-                    val maKhuTro = response.headers()["ma_khu_tro"]
 
-                    Log.d("MaKhuTro", "Ma khu tro nhan duoc: $maKhuTro")
-
-                    // Chuyển đến ActivityTaoPhongKhiThemKhu
                     val intent = Intent(this@ActivityThemKhuTro, ActivityTaoPhongKhiThemKhu::class.java)
 
-                    intent.putExtra(MA_KHU_TU_TAO_KHU, maKhuTro)
+                    Log.d("Response", "ID received from server: $khuTro.ma_khu_tro")
+                    intent.putExtra(MA_KHU_TU_TAO_KHU, khuTro.ma_khu_tro)
                     intent.putExtra(SO_LUONG_PHONG_KEY, khuTro.so_luong_phong)
                     startActivity(intent)
                     finish()

@@ -13,13 +13,13 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.properties.Delegates
+import java.util.UUID
 
 class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
     private lateinit var binding: ActivityTaoPhongKhiThemKhuBinding
     private lateinit var phongApiService: PhongApiService
-    private var maKhu by Delegates.notNull<Int>()
-    private var soPhongTro by Delegates.notNull<Int>()
+    private lateinit var maKhuTro: String
+    private var soPhongTro: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +29,11 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
         phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
 
         // Nhận mã khu và số lượng phòng từ Intent
-        maKhu = intent.getIntExtra(MA_KHU_TU_TAO_KHU, 0)
+        maKhuTro = intent.getStringExtra(MA_KHU_TU_TAO_KHU) ?: ""
         soPhongTro = intent.getIntExtra(SO_LUONG_PHONG_KEY, 0)
 
         // Log để kiểm tra xem mã khu và số lượng phòng có được nhận đúng không
-        Log.d("ActivityTaoPhongKhiThemKhu", "Mã khu: $maKhu, Số lượng phòng: $soPhongTro")
+        Log.d("ActivityTaoPhongKhiThemKhu", "Mã khu: $maKhuTro, Số lượng phòng: $soPhongTro")
 
         binding.edSoPhongTro.isEnabled = false
         binding.edSoPhongTro.setTextColor(Color.BLACK)
@@ -43,6 +43,8 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
             if (!validateInput()) {
                 showErrorMessage("Vui lòng nhập đủ thông tin!!!")
             } else {
+                val idPhong = UUID.randomUUID().toString()
+                val maPhong = idPhong
                 val tenPhong = binding.edTenPhongTro.text.toString()
                 val soNguoiO = binding.edSoNguoiToiDa.text.toString().toInt()
                 val giaThue = binding.edGiaThue.text.toString().toLong()
@@ -50,7 +52,7 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
                 val trangThaiPhong = 0
 
                 // Sử dụng mã khu nhận được từ Intent khi tạo đối tượng Phong mới
-                val newPhong = Phong(tenPhong, soNguoiO, giaThue, dienTich, trangThaiPhong, maKhu)
+                val newPhong = Phong(maPhong, tenPhong, soNguoiO, giaThue, dienTich, trangThaiPhong, maKhuTro)
 
                 insertNewPhong(newPhong)
             }
@@ -74,9 +76,8 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
                     // Log để kiểm tra gửi yêu cầu thành công hay không
                     Log.d("ActivityTaoPhongKhiThemKhu", "Gửi yêu cầu thành công")
 
+// Chuyển hướng người dùng đ
                     val intent = Intent(this@ActivityTaoPhongKhiThemKhu, ActivityManHinhChinhChuTro::class.java)
-                    val MA_KHU_KEY = "ma_khu"
-                    intent.putExtra(MA_KHU_KEY, maKhu)
                     startActivity(intent)
                     finishAffinity()
                 } else {
