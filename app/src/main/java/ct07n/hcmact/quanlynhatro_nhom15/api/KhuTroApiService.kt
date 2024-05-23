@@ -6,21 +6,21 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface KhuTroApiService {
-    @POST("api/khutro")
+    @POST("khutro")
     fun insertKhuTro(@Body khuTro: KhuTro): Call<Void>
 
-    @PUT("api/khutro/{id}")
+    @PUT("khutro/{id}")
     fun updateKhuTro(@Path("id") id: String, @Body khuTro: KhuTro): Call<Void>
 
-    @DELETE("api/khutro/{id}")
+    @DELETE("khutro/{id}")
     fun deleteKhuTro(@Path("id") id: String): Call<Void>
 
-    @GET("api/khutro")
+    @GET("khutro")
     fun getAllKhuTro(): Call<List<KhuTro>>
 
-    @GET("api/khutro/admin/{username}")
+    @GET("khutro/admin/{username}")
     fun getAllInKhuTroByAdmin(@Path("username") username: String): Call<List<KhuTro>>
 
-    @GET("api/khutro/names")
+    @GET("khutro/name")
     fun getTenKhuTro(): Call<List<String>>
 }

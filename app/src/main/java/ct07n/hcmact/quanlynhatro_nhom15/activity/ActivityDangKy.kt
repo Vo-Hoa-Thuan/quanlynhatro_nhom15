@@ -25,7 +25,6 @@ import java.time.format.DateTimeParseException
 
 class ActivityDangKy : AppCompatActivity() {
     private lateinit var binding: ActivityDangKyBinding
-    private lateinit var adminApiService: AdminApiService
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +32,7 @@ class ActivityDangKy : AppCompatActivity() {
         binding = ActivityDangKyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adminApiService = RetrofitClient.instance.create(AdminApiService::class.java)
+        var adminApiService = RetrofitClient.instance.create(AdminApiService::class.java)
 
         setSupportActionBar(binding.tbDangKy)
         val ab = supportActionBar

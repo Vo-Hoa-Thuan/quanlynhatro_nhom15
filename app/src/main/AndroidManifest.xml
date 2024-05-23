@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="ct07n.hcmact.quanlynhatro_nhom5">
+    package="ct07n.hcmact.quanlynhatro_nhom15">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -32,6 +32,19 @@
 
         <activity
             android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityDangKy"
+            android:exported="false" />
+
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityManHinhChinhChuTro"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityHuongDanTaoKhu"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThemKhuTro"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityTaoPhongKhiThemKhu"
             android:exported="false" />
 
     </application>
