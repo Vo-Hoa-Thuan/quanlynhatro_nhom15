@@ -16,8 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val THONG_TIN_DANG_NHAP = "Thong_tin_dang_nhap"
-const val USERNAME_KEY = "USERNAME"
+
 const val PASSWORD_KEY = "PASSWORD"
 const val CHECKBOX_KEY = "REMEMBER"
 

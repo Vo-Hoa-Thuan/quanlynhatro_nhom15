@@ -6,18 +6,18 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface HopdongApiService {
-    @GET("api/hopDong")
+    @GET("hopDong")
     fun getAllHopDong(): Call<List<HopDong>>
 
-    @POST("api/hopDong")
+    @POST("hopDong")
     fun insertHopDong(@Body hopDong: HopDong): Call<Void>
 
-    @GET("api/hopDong/{id}")
+    @GET("hopDong/{id}")
     fun getHopDongById(@Path("id") id: String): Call<HopDong>
 
-    @DELETE("api/hopDong/{id}")
+    @DELETE("hopDong/{id}")
     fun deleteHopDong(@Path("id") id: String): Call<Void>
 
-    @PUT("api/hopDong/{id}")
-    fun updateHopDong(@Path("id") id: String, @Body hopDong: HopDong): Call<Void>
+    @PUT("hopDong/{id}")
+    fun updateHopDong(@Path("id") id: HopDong, @Body hopDong: HopDong): Call<Void>
 }

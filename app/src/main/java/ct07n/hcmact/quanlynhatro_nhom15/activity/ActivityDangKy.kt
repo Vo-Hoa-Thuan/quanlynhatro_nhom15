@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityDangNhap
 import ct07n.hcmact.quanlynhatro_nhom15.api.AdminApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.ActivityDangKyBinding
@@ -19,9 +18,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.Admin
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
+
 
 class ActivityDangKy : AppCompatActivity() {
     private lateinit var binding: ActivityDangKyBinding
