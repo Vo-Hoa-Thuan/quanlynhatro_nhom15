@@ -35,8 +35,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-const val THONG_TIN_DANG_NHAP = "Thong_tin_dang_nhap"
-const val USERNAME_KEY = "USERNAME"
 const val FILE_NAME = "file_name"
 const val MA_KHU_KEY = "MA_KHU_KEY"
 
