@@ -61,7 +61,7 @@ class FragmentQuanLy : Fragment() {
     private fun tinhNgaySapHetHanHopDong(hopDong: HopDong, a: Int) {
         // Bạn muốn làm gì ở đây?
     }
-
+//thahdhd
     private fun updateHopDongStatus(hopDong: HopDong, newStatus: Int) {
         // Bạn muốn làm gì ở đây?
     }
