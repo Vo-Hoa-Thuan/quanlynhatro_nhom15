@@ -43,20 +43,21 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
             if (!validateInput()) {
                 showErrorMessage("Vui lòng nhập đủ thông tin!!!")
             } else {
-                val idPhong = UUID.randomUUID().toString()
-                val maPhong = idPhong
                 val tenPhong = binding.edTenPhongTro.text.toString()
                 val soNguoiO = binding.edSoNguoiToiDa.text.toString().toInt()
                 val giaThue = binding.edGiaThue.text.toString().toLong()
                 val dienTich = binding.edDienTichPhong.text.toString().toInt()
                 val trangThaiPhong = 0
 
-                // Sử dụng mã khu nhận được từ Intent khi tạo đối tượng Phong mới
-                val newPhong = Phong(maPhong, tenPhong, soNguoiO, giaThue, dienTich, trangThaiPhong, maKhuTro)
-
-                insertNewPhong(newPhong)
+                // Sử dụng vòng lặp repeat để tạo hàng loạt phòng với ID khác nhau
+                repeat(soPhongTro) { index ->
+                    val idPhong = UUID.randomUUID().toString()
+                    val newPhong = Phong(idPhong, tenPhong, soNguoiO, giaThue, dienTich, trangThaiPhong, maKhuTro)
+                    insertNewPhong(newPhong)
+                }
             }
         }
+
     }
 
     private fun validateInput(): Boolean {
@@ -104,4 +105,6 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+
 }
