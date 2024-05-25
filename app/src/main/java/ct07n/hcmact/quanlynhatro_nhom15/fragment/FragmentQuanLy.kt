@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ct07n.hcmact.quanlynhatro_nhom15.activity.*
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.FILE_NAME
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MA_KHU_KEY
 import ct07n.hcmact.quanlynhatro_nhom15.api.HopdongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.TablayoutQuanlyBinding

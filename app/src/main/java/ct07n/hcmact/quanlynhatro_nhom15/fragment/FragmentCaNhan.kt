@@ -8,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityDangNhap
-import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThongTinChuNha
-import ct07n.hcmact.quanlynhatro_nhom15.activity.THONG_TIN_DANG_NHAP
-import ct07n.hcmact.quanlynhatro_nhom15.activity.USERNAME_KEY
+import ct07n.hcmact.quanlynhatro_nhom15.activity.*
 import ct07n.hcmact.quanlynhatro_nhom15.api.AdminApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.FragmentCaNhanBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.Admin
+import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThongTinChuNha
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,11 +68,13 @@ class FragmentCaNhan : Fragment() {
 
         binding.tvThongTinChuNha.setOnClickListener {
             val intent = Intent(activity, ActivityThongTinChuNha::class.java)
+            intent.putExtra("username", username)
             startActivity(intent)
         }
 
         binding.tvCapNhat.setOnClickListener {
-            val intent = Intent(activity, ActivityThongTinChuNha::class.java)
+            val intent = Intent(activity, ActivityCapNhatThongTinChuNha::class.java)
+            intent.putExtra("username", username)
             startActivity(intent)
         }
     }

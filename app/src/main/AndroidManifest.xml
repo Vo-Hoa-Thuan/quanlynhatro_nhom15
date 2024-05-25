@@ -49,6 +49,9 @@
         <activity
             android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThongTinChuNha"
             android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityCapNhatThongTinChuNha"
+            android:exported="false" />
 
 
     </application>

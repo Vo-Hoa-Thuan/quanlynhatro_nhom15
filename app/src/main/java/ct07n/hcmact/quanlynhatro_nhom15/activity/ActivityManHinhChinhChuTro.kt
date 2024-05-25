@@ -11,6 +11,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -68,47 +69,74 @@ class ActivityManHinhChinhChuTro : AppCompatActivity() {
         setupViewPager()
     }
 
-    private fun showKhuTroDialog() {
-        TODO("Not yet implemented")
-    }
-
     private fun fetchKhuTroData(admin: String) {
         val call = khuTroApiService.getAllInKhuTroByAdmin(admin)
         call.enqueue(object : Callback<List<KhuTro>> {
             override fun onResponse(call: Call<List<KhuTro>>, response: Response<List<KhuTro>>) {
                 if (response.isSuccessful) {
-                    listKhuTro = response.body() ?: listOf()
+                    listKhuTro = response.body() ?: emptyList()
                     initializeKhuTro()
+                    Log.d("ActivityManHinhChinhChuTro", "Fetch KhuTro data successful: ${listKhuTro.size} items received.")
                 } else {
-                    // Handle the error
+                    Log.e("ActivityManHinhChinhChuTro", "Fetch KhuTro data failed with code ${response.code()}: ${response.message()}")
+                    // Xử lý trường hợp không thành công
                 }
             }
 
             override fun onFailure(call: Call<List<KhuTro>>, t: Throwable) {
-                // Handle the error
+                // Xử lý trường hợp gặp lỗi khi gọi API
+                Log.e("ActivityManHinhChinhChuTro", "Fetch KhuTro data failed: ${t.message}")
             }
         })
     }
 
     private fun initializeKhuTro() {
+        // Cập nhật mã khu hiện tại nếu không có mã khu hoặc mã khu không tồn tại trong danh sách
+        if (maKhu.isEmpty() || listKhuTro.none { it.ma_khu_tro == maKhu }) {
+            maKhu = listKhuTro.firstOrNull()?.ma_khu_tro ?: ""
+            Log.d("ActivityManHinhChinhChuTro", "Initialized maKhu: $maKhu")
+        }
+
+        // Cập nhật giao diện người dùng với mã khu mới
+        val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
+        binding.titleTenKhuTro.text = "Khu ${khuTro?.ten_khu_tro}"
         val pre: SharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        if (listKhuTro.isEmpty()) {
-            val intent = Intent(this@ActivityManHinhChinhChuTro, ActivityHuongDanTaoKhu::class.java)
+        pre.edit().putString(MA_KHU_KEY, maKhu).apply()
+    }
+
+
+    private fun showKhuTroDialog() {
+        val dialogBinding = DialogDanhSachKhuTroBinding.inflate(LayoutInflater.from(this))
+        val adapter = KhuTroAdapter(listKhuTro)
+
+        // Cấu hình RecyclerView và Adapter để hiển thị danh sách khu trọ
+        dialogBinding.rcyKhuTro.layoutManager = LinearLayoutManager(this)
+        dialogBinding.rcyKhuTro.adapter = adapter
+
+        // Gán sự kiện click cho nút đóng để đóng dialog
+        dialogBinding.icClose.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // Gán sự kiện click cho nút thêm khu trọ để chuyển sang màn hình thêm khu trọ
+        dialogBinding.btnThemKhuTro.setOnClickListener {
+            val intent = Intent(this, ActivityThemKhuTro::class.java)
             startActivity(intent)
             finish()
         }
-        when {
-            intent.getStringExtra(MA_KHU_KEY) == null -> {
-                if (listKhuTro.isNotEmpty()) maKhu = listKhuTro[0].ma_khu_tro
-            }
-            else -> maKhu = intent.getStringExtra(MA_KHU_KEY)!!
-        }
-        val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
-        binding.titleTenKhuTro.text = "Khu " + khuTro?.ten_khu_tro
-        pre.edit().putString(MA_KHU_KEY, maKhu).apply()
 
+        // Hiển thị dialog
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (bottomSheetDialog.isShowing) {
+            bottomSheetDialog.dismiss()
+        }
+    }
 
 
     private fun setupViewPager() {
