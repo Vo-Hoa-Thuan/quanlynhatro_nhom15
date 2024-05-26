@@ -52,7 +52,33 @@
         <activity
             android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityCapNhatThongTinChuNha"
             android:exported="false" />
-
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityDanhSachPhong"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThemPhong"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityChiTietPhong"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityPhongTrong"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityPhongDangThue"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityTaoHopDong"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivitytaoHopDongMoi"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityCapNhatKhachThue"
+            android:exported="false" />
+        <activity
+            android:name="ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityDanhSachNguoiThue"
+            android:exported="false" />
 
     </application>
 

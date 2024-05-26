@@ -40,4 +40,12 @@ interface PhongApiService {
 
     @GET("phong/dem/{maKhu}")
     fun demSoPhong(@Path("maKhu") maKhu: String): Call<Int>
+
+    @GET("phong")
+    fun getAllPhong(): Call<List<Phong>>
+    companion object {
+        fun getInstance(): PhongApiService {
+            return RetrofitClient.instance.create(PhongApiService::class.java)
+        }
+    }
 }

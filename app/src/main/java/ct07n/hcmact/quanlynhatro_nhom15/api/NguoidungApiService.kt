@@ -68,4 +68,11 @@ interface NguoidungApiService {
 
     @PUT("nguoidung/{maPhong}/updatetrangthaidao")
     fun updateTrangThaiNguoiDungThanhDaO(@Path("maPhong") maPhong: String): Call<Void>
+
+    companion object {
+        fun getInstance(): NguoidungApiService {
+            return RetrofitClient.instance.create(NguoidungApiService::class.java)
+        }
+    }
+
 }

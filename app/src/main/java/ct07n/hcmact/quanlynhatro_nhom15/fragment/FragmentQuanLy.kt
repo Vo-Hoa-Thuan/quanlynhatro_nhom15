@@ -35,17 +35,17 @@ class FragmentQuanLy : Fragment() {
         apiService = RetrofitClient.instance.create(HopdongApiService::class.java)
 
         binding.taoHopDong.setOnClickListener {
-            val intent = Intent(context, ActivityThemKhuTro::class.java)
+            val intent = Intent(context, ActivityTaoHopDong::class.java)
             startActivity(intent)
         }
 
         binding.dsPhongThue.setOnClickListener {
-            val intent = Intent(context, ActivityThemKhuTro::class.java)
+            val intent = Intent(context, ActivityDanhSachPhong::class.java)
             startActivity(intent)
         }
 
         binding.dsKhachThue.setOnClickListener {
-            val intent = Intent(context, ActivityThemKhuTro::class.java)
+            val intent = Intent(context, ActivityDanhSachNguoiThue::class.java)
             startActivity(intent)
         }
 
@@ -59,7 +59,7 @@ class FragmentQuanLy : Fragment() {
     private fun tinhNgaySapHetHanHopDong(hopDong: HopDong, a: Int) {
         // Bạn muốn làm gì ở đây?
     }
-//thahdhd
+    //thahdhd
     private fun updateHopDongStatus(hopDong: HopDong, newStatus: Int) {
         // Bạn muốn làm gì ở đây?
     }
