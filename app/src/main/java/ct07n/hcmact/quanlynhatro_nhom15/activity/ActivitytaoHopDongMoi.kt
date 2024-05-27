@@ -18,6 +18,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.NguoiThueSpinnerAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.api.HopdongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
+import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.ActivityActivitytaoHopDongMoiBinding
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.DialogThemKhachThueHopDongBinding
@@ -36,7 +37,6 @@ class ActivitytaoHopDongMoi : AppCompatActivity() {
     private lateinit var tenPhong: String
     private var check: String = ""
     private var maND: String = ""
-    private lateinit var nguoiDungTong : NguoiDung
     private var listND: List<NguoiDung> = listOf()
     private lateinit var srf: SharedPreferences
     private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -108,8 +108,6 @@ class ActivitytaoHopDongMoi : AppCompatActivity() {
                         ma_phong = maPhong,trang_thai_o = 1,
                         trang_thai_chu_hop_dong = 0,
                     )
-                    nguoiDungTong = nguoiDung
-//                    val call = NguoidungApiService.insert(nguoiDung)
                     NguoidungApiService.insert(nguoiDung).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
@@ -239,13 +237,26 @@ class ActivitytaoHopDongMoi : AppCompatActivity() {
     }
 
     private fun createHopDong() {
+        val thoiHan = binding.edThoiHan.text.toString().toInt()
+        val ngayO = chuyenDinhDangNgay(binding.edNgayBatDauO.text.toString())
+
+        // Create a Calendar instance and set it to the ngay_o date
+        val calendar = Calendar.getInstance()
+        calendar.time = simpleDateFormatNow.parse(ngayO)
+
+        // Add the thoi_han (in months) to the ngay_o date
+        calendar.add(Calendar.MONTH, thoiHan)
+
+        // Format the new date back to a string
+        val ngayHopDong = simpleDateFormatNow.format(calendar.time)
+
         val hopDong = HopDong(
             ma_hop_dong = UUID.randomUUID().toString(),
             ma_phong = maPhong,
             ma_nguoi_dung = maND,
-            thoi_han = binding.edThoiHan.text.toString().toInt(),
-            ngay_o = chuyenDinhDangNgay(binding.edNgayBatDauO.text.toString()),
-            ngay_hop_dong = simpleDateFormatNow.format(Date()),
+            thoi_han = thoiHan,
+            ngay_o = ngayO,
+            ngay_hop_dong = ngayHopDong,
             tien_coc = binding.edTienCoc.text.toString().toInt(),
             anh_hop_dong = "default_image_link",
             trang_thai_hop_dong = if (binding.chkTrangThai.isChecked) 1 else 0,
@@ -258,7 +269,20 @@ class ActivitytaoHopDongMoi : AppCompatActivity() {
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    showSuccessDialog("Hợp đồng được tạo thành công!")
+                    val phongService = PhongApiService.getInstance()
+                    phongService.updateTrangThaiPhongThanhDangO(hopDong.ma_phong).enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                showSuccessDialog("Hợp đồng được tạo thành công và trạng thái phòng đã được cập nhật!")
+                            } else {
+                                showErrorDialog("Cập nhật trạng thái phòng không thành công!")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            showErrorDialog("Lỗi kết nối khi cập nhật trạng thái phòng!")
+                        }
+                    })
                 } else {
                     showErrorDialog("Tạo hợp đồng không thành công!")
                 }

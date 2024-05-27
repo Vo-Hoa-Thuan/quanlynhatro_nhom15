@@ -54,7 +54,7 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
                     val trangThaiPhong = 0
                     repeat(soPhongTro) { index ->
                         val idPhong = UUID.randomUUID().toString()
-                        val newPhong = Phong(idPhong, "Phòng ${index + 1}", soNguoiO.toInt(), giaThue.toLong(), dienTich.toInt(), trangThaiPhong, maKhuTro)
+                        val newPhong = Phong(idPhong, "Phòng ${index + 1}", dienTich.toInt(),giaThue.toLong(),  soNguoiO.toInt(),  trangThaiPhong, maKhuTro)
                         insertNewPhong(newPhong)
                     }
                 }
