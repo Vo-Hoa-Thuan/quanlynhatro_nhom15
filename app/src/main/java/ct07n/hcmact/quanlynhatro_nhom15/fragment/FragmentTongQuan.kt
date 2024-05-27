@@ -8,13 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.FILE_NAME
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MA_KHU_KEY
 import ct07n.hcmact.quanlynhatro_nhom15.activity.*
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.KhuTroApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
-import ct07n.hcmact.quanlynhatro_nhom15.api.HopdongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.TablayoutTongquanBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import ct07n.hcmact.quanlynhatro_nhom15.model.HopDong
@@ -25,33 +22,57 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FragmentTongQuan : Fragment() {
+class FragmentTongQuan:Fragment() {
     private lateinit var binding: TablayoutTongquanBinding
-    var listHopDongSapHetHan = listOf<HopDong>()
-    var listHopDong = listOf<HopDong>()
     var listPhong = listOf<Phong>()
     var listPhongTrong = listOf<Phong>()
     var listPhongDangThue = listOf<Phong>()
     private var maKhu = ""
     private var tenKhu = ""
     private var listKhuTro = listOf<KhuTro>()
-
+    private val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
+    private val khuTroApiService = RetrofitClient.instance.create(KhuTroApiService::class.java)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = TablayoutTongquanBinding.inflate(layoutInflater, container, false)
+        binding = TablayoutTongquanBinding.inflate(layoutInflater)
+
 
         val srf = binding.root.context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
         maKhu = srf.getString(MA_KHU_KEY, "")!!
-        val admin = binding.root.context.getSharedPreferences(THONG_TIN_DANG_NHAP, AppCompatActivity.MODE_PRIVATE).getString(
-            USERNAME_KEY, "")!!
+        //================================
+        val admin =
+            binding.root.context.getSharedPreferences(
+                THONG_TIN_DANG_NHAP,
+                AppCompatActivity.MODE_PRIVATE
+            ).getString(
+                USERNAME_KEY, ""
+            )!!
 
-        loadKhuTroData(admin) { khuTro ->
-            binding.tvTenKhuTongQuan.text = ("Khu ") + khuTro?.ten_khu_tro
-            onResume()  // Load data after setting the khuTro name
-        }
+        khuTroApiService.getAllInKhuTroByAdmin(admin).enqueue(object : Callback<List<KhuTro>> {
+            override fun onResponse(call: Call<List<KhuTro>>, response: Response<List<KhuTro>>) {
+                if (response.isSuccessful) {
+                    listKhuTro = response.body() ?: listOf()
+                    val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
+                    binding.tvTenKhuTongQuan.text = "Khu ${khuTro?.ten_khu_tro}"
+                    onResume()
+                }
+            }
+
+            override fun onFailure(call: Call<List<KhuTro>>, t: Throwable) {
+                // Xử lý lỗi
+            }
+        })
+
+        val pre =
+            binding.root.context.getSharedPreferences(FILE_NAME, AppCompatActivity.MODE_PRIVATE)
+
+        val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
+        binding.tvTenKhuTongQuan.text = ("Khu ") + khuTro?.ten_khu_tro
+        pre.edit().putString(MA_KHU_KEY, maKhu).commit()
+        onResume()
         binding.phongTrong.setOnClickListener {
             val intent = Intent(context, ActivityPhongTrong::class.java)
             startActivity(intent)
@@ -64,34 +85,10 @@ class FragmentTongQuan : Fragment() {
         return binding.root
     }
 
-    private fun loadKhuTroData(admin: String, callback: (KhuTro?) -> Unit) {
-        val khuTroApiService = RetrofitClient.instance.create(KhuTroApiService::class.java)
-        khuTroApiService.getAllInKhuTroByAdmin(admin).enqueue(object : Callback<List<KhuTro>> {
-            override fun onResponse(call: Call<List<KhuTro>>, response: Response<List<KhuTro>>) {
-                if (response.isSuccessful) {
-                    listKhuTro = response.body() ?: listOf()
-                    val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
-                    callback(khuTro)
-                } else {
-                    callback(null)
-                }
-            }
-
-            override fun onFailure(call: Call<List<KhuTro>>, t: Throwable) {
-                // Xử lý lỗi nếu có
-                callback(null)
-            }
-        })
-    }
 
     override fun onResume() {
         super.onResume()
-        loadPhongData()
-        loadHopDongData()
-    }
 
-    private fun loadPhongData() {
-        val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
         phongApiService.getAllInPhongByMaKhu(maKhu).enqueue(object : Callback<List<Phong>> {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
@@ -106,23 +103,9 @@ class FragmentTongQuan : Fragment() {
             }
 
             override fun onFailure(call: Call<List<Phong>>, t: Throwable) {
-                // Xử lý lỗi nếu có
-            }
-        })
-    }
-
-    private fun loadHopDongData() {
-        val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
-        hopDongApiService.getAllHopDong().enqueue(object : Callback<List<HopDong>> {
-            override fun onResponse(call: Call<List<HopDong>>, response: Response<List<HopDong>>) {
-                if (response.isSuccessful) {
-                    listHopDongSapHetHan = response.body() ?: listOf()
-                }
-            }
-
-            override fun onFailure(call: Call<List<HopDong>>, t: Throwable) {
-                // Xử lý lỗi nếu có
+                // Xử lý lỗi
             }
         })
     }
 }
+

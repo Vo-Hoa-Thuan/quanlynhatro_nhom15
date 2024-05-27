@@ -33,18 +33,21 @@ class PhongTroViewHolder(private val context: Context, private val binding: Layo
     fun bind(phong: Phong) {
         binding.tvTenPhong.text = phong.ten_phong
         binding.tvGiaThue.text = phong.gia_thue.toString()
+        binding.tvGioiHanNguoiO.text = if (phong.so_nguoi_o == 0) {
+            "Tối đa: Không giới hạn"
+        } else {
+            "Tối đa: ${phong.so_nguoi_o} người"
+        }
 
         // Gọi API để lấy danh sách người đang ở trong phòng
-        val call = nguoidungApiService.getNguoiDungByMaPhong(phong.ma_phong)
+        val call = nguoidungApiService.getListNguoiDungByMaPhong(phong.ma_phong)
         call.enqueue(object : Callback<List<NguoiDung>> {
             override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
                 if (response.isSuccessful) {
-                    val nguoiDungs = response.body()
-                    // Xử lý dữ liệu người dùng và cập nhật giao diện
-                    binding.tvSoNguoiHienTai.text = "Có ${nguoiDungs?.size ?: 0} người đang ở"
-                    // Cập nhật trạng thái của phòng dựa trên dữ liệu từ API
-                    binding.chkTrangThaiPhongDaCoc.isChecked = nguoiDungs != null && nguoiDungs.isNotEmpty()
-                    binding.chkTrangThaiPhongTrong.isChecked = nguoiDungs == null || nguoiDungs.isEmpty()
+                    val listNguoiDung = response.body() ?: listOf()
+                    binding.tvSoNguoiHienTai.text = "có ${listNguoiDung.size} người đang ở"
+                    binding.chkTrangThaiPhongDaCoc.isChecked = listNguoiDung.isNotEmpty()
+                    binding.chkTrangThaiPhongTrong.isChecked = listNguoiDung.isEmpty()
                 } else {
                     // Xử lý lỗi khi không thành công
                     val errorBody = response.errorBody()?.string()

@@ -10,8 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AppCompatActivity
 import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityThemPhong
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.FILE_NAME
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MA_KHU_KEY
+import ct07n.hcmact.quanlynhatro_nhom15.activity.*
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.PhongTroAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient

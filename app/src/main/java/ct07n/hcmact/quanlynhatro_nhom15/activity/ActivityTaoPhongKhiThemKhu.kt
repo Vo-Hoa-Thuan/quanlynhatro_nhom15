@@ -40,24 +40,38 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
         binding.edSoPhongTro.setText(soPhongTro.toString())
 
         binding.btnLuuThemPhong.setOnClickListener {
-            if (!validateInput()) {
-                showErrorMessage("Vui lòng nhập đủ thông tin!!!")
-            } else {
-                val tenPhong = binding.edTenPhongTro.text.toString()
-                val soNguoiO = binding.edSoNguoiToiDa.text.toString().toInt()
-                val giaThue = binding.edGiaThue.text.toString().toLong()
-                val dienTich = binding.edDienTichPhong.text.toString().toInt()
-                val trangThaiPhong = 0
+            val tenPhong = binding.edTenPhongTro.text.toString().trim()
+            val soNguoiO = binding.edSoNguoiToiDa.text.toString().trim()
+            val giaThue = binding.edGiaThue.text.toString().trim()
+            val dienTich = binding.edDienTichPhong.text.toString().trim()
 
-                // Sử dụng vòng lặp repeat để tạo hàng loạt phòng với ID khác nhau
-                repeat(soPhongTro) { index ->
-                    val idPhong = UUID.randomUUID().toString()
-                    val newPhong = Phong(idPhong, tenPhong, soNguoiO, giaThue, dienTich, trangThaiPhong, maKhuTro)
-                    insertNewPhong(newPhong)
+            if (tenPhong.isEmpty()) {
+                if (soNguoiO.isEmpty() || giaThue.isEmpty() || dienTich.isEmpty()) {
+                    showErrorMessage("Vui lòng nhập đủ thông tin!!!")
+                } else {
+                    // Nếu tên phòng không được nhập, nhưng các thông tin khác được nhập đầy đủ
+                    // thì tự động tạo tên phòng và tạo các phòng
+                    val trangThaiPhong = 0
+                    repeat(soPhongTro) { index ->
+                        val idPhong = UUID.randomUUID().toString()
+                        val newPhong = Phong(idPhong, "Phòng ${index + 1}", soNguoiO.toInt(), giaThue.toLong(), dienTich.toInt(), trangThaiPhong, maKhuTro)
+                        insertNewPhong(newPhong)
+                    }
+                }
+            } else {
+                if (soNguoiO.isEmpty() || giaThue.isEmpty() || dienTich.isEmpty()) {
+                    showErrorMessage("Vui lòng nhập đủ thông tin!!!")
+                } else {
+                    // Nếu tên phòng được nhập, kiểm tra các thông tin khác và tạo các phòng
+                    val trangThaiPhong = 0
+                    repeat(soPhongTro) { index ->
+                        val idPhong = UUID.randomUUID().toString()
+                        val newPhong = Phong(idPhong, tenPhong, soNguoiO.toInt(), giaThue.toLong(), dienTich.toInt(), trangThaiPhong, maKhuTro)
+                        insertNewPhong(newPhong)
+                    }
                 }
             }
         }
-
     }
 
     private fun validateInput(): Boolean {
@@ -66,8 +80,14 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
         val giaThue = binding.edGiaThue.text.toString()
         val dienTich = binding.edDienTichPhong.text.toString()
 
-        return tenPhong.isNotBlank() && soNguoiO.isNotBlank() && giaThue.isNotBlank() && dienTich.isNotBlank()
+        return if (tenPhong.isBlank()) {
+            false // Trả về false nếu tên phòng không được nhập
+        } else {
+            // Kiểm tra các trường thông tin khác và trả về true nếu tất cả được nhập
+            soNguoiO.isNotBlank() && giaThue.isNotBlank() && dienTich.isNotBlank()
+        }
     }
+
 
     private fun insertNewPhong(phong: Phong) {
         val call = phongApiService.insertPhong(phong)
