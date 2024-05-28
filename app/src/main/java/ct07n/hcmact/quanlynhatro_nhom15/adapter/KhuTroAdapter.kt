@@ -1,14 +1,12 @@
 package ct07n.hcmact.quanlynhatro_nhom15.adapter
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityManHinhChinhChuTro
 import ct07n.hcmact.quanlynhatro_nhom15.api.KhuTroApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
@@ -24,8 +22,30 @@ const val MA_KHU_KEY = "ma_khu"
 const val TEN_KHU_KEY = "ten_khu_tro"
 const val FILE_NAME = "USER_FILE"
 
+class KhuTroAdapter(
+    private val list: List<KhuTro>,
+    private val onKhuTroSelected: (KhuTro) -> Unit
+) : RecyclerView.Adapter<KhuTroViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KhuTroViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = LayoutItemKhuTroBinding.inflate(inflater, parent, false)
+        return KhuTroViewHolder(binding, onKhuTroSelected)
+    }
+
+    override fun onBindViewHolder(holder: KhuTroViewHolder, position: Int) {
+        val khuTro = list[position]
+        holder.bind(khuTro)
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+}
+
 class KhuTroViewHolder(
-    val binding: LayoutItemKhuTroBinding
+    val binding: LayoutItemKhuTroBinding,
+    private val onKhuTroSelected: (KhuTro) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
@@ -39,14 +59,10 @@ class KhuTroViewHolder(
         binding.tvTenKhuTro.text = "Khu: " + khuTro.ten_khu_tro
         binding.tvDiaChiKhuTro.text = "Địa chỉ: " + khuTro.dia_chi
 
-        // Fetch all rooms and available rooms
         fetchRooms(khuTro.ten_khu_tro)
 
         binding.btnQuanLyKhuTro.setOnClickListener {
-            val intent = Intent(context, ActivityManHinhChinhChuTro::class.java)
-            intent.putExtra(MA_KHU_KEY, khuTro.ma_khu_tro)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            context.startActivity(intent)
+            onKhuTroSelected(khuTro)
         }
 
         if (maKhu == khuTro.ma_khu_tro) {
@@ -115,25 +131,5 @@ class KhuTroViewHolder(
             context.startActivity(intent)
         }
         bundle.show()
-    }
-}
-
-class KhuTroAdapter(
-    private val list: List<KhuTro>
-) : RecyclerView.Adapter<KhuTroViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KhuTroViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = LayoutItemKhuTroBinding.inflate(inflater, parent, false)
-        return KhuTroViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: KhuTroViewHolder, position: Int) {
-        val khuTro = list[position]
-        holder.bind(khuTro)
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
     }
 }

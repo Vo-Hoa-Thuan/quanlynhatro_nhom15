@@ -1,10 +1,7 @@
 package ct07n.hcmact.quanlynhatro_nhom15.activity
 
-import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -31,9 +28,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val FILE_NAME = "file_name"
@@ -60,6 +54,9 @@ class ActivityManHinhChinhChuTro : AppCompatActivity() {
 
         val admin = getSharedPreferences(THONG_TIN_DANG_NHAP, MODE_PRIVATE).getString(USERNAME_KEY, "")!!
 
+        // Nhận ma_khu từ Intent và cập nhật giao diện
+        maKhu = intent.getStringExtra(MA_KHU_KEY) ?: ""
+
         fetchKhuTroData(admin)
 
         binding.imgMenuManHinhChinh.setOnClickListener {
@@ -79,65 +76,56 @@ class ActivityManHinhChinhChuTro : AppCompatActivity() {
                     Log.d("ActivityManHinhChinhChuTro", "Fetch KhuTro data successful: ${listKhuTro.size} items received.")
                 } else {
                     Log.e("ActivityManHinhChinhChuTro", "Fetch KhuTro data failed with code ${response.code()}: ${response.message()}")
-                    // Xử lý trường hợp không thành công
                 }
             }
 
             override fun onFailure(call: Call<List<KhuTro>>, t: Throwable) {
-                // Xử lý trường hợp gặp lỗi khi gọi API
                 Log.e("ActivityManHinhChinhChuTro", "Fetch KhuTro data failed: ${t.message}")
             }
         })
     }
 
     private fun initializeKhuTro() {
-        // Cập nhật mã khu hiện tại nếu không có mã khu hoặc mã khu không tồn tại trong danh sách
-        if (maKhu.isEmpty() || listKhuTro.none { it.ma_khu_tro == maKhu }) {
-            maKhu = listKhuTro.firstOrNull()?.ma_khu_tro ?: ""
-            Log.d("ActivityManHinhChinhChuTro", "Initialized maKhu: $maKhu")
+        if (listKhuTro.isNotEmpty()) {
+            if (maKhu.isEmpty() || listKhuTro.none { it.ma_khu_tro == maKhu }) {
+                maKhu = listKhuTro.firstOrNull()?.ma_khu_tro ?: ""
+            }
+            val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
+            binding.titleTenKhuTro.text = "Khu ${khuTro?.ten_khu_tro}"
+            val pre: SharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
+            pre.edit().putString(MA_KHU_KEY, maKhu).apply()
         }
-
-        // Cập nhật giao diện người dùng với mã khu mới
-        val khuTro = listKhuTro.find { it.ma_khu_tro == maKhu }
-        binding.titleTenKhuTro.text = "Khu ${khuTro?.ten_khu_tro}"
-        val pre: SharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        pre.edit().putString(MA_KHU_KEY, maKhu).apply()
     }
-
 
     private fun showKhuTroDialog() {
         val dialogBinding = DialogDanhSachKhuTroBinding.inflate(LayoutInflater.from(this))
-        val adapter = KhuTroAdapter(listKhuTro)
+        val adapter = KhuTroAdapter(listKhuTro) { selectedKhuTro ->
+            // Khi người dùng chọn khu trọ, cập nhật ma_khu và giao diện
+            maKhu = selectedKhuTro.ma_khu_tro
+            initializeKhuTro()
+            bottomSheetDialog.dismiss()
+            Log.d("ActivityManHinhChinh", "Selected KhuTro: ${selectedKhuTro.ma_khu_tro}")
+            Log.d("ActivityManHinhChinh", "Updated maKhu: $maKhu")
+        }
 
-        // Cấu hình RecyclerView và Adapter để hiển thị danh sách khu trọ
         dialogBinding.rcyKhuTro.layoutManager = LinearLayoutManager(this)
         dialogBinding.rcyKhuTro.adapter = adapter
 
-        // Gán sự kiện click cho nút đóng để đóng dialog
         dialogBinding.icClose.setOnClickListener {
             bottomSheetDialog.dismiss()
         }
 
-        // Gán sự kiện click cho nút thêm khu trọ để chuyển sang màn hình thêm khu trọ
         dialogBinding.btnThemKhuTro.setOnClickListener {
             val intent = Intent(this, ActivityThemKhuTro::class.java)
             startActivity(intent)
             finish()
         }
 
-        // Hiển thị dialog
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
+
+
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (bottomSheetDialog.isShowing) {
-            bottomSheetDialog.dismiss()
-        }
-    }
-
 
     private fun setupViewPager() {
         val adapter = ViewPagerManHinhChinhAdapter(supportFragmentManager, lifecycle)
@@ -173,5 +161,4 @@ class ActivityManHinhChinhChuTro : AppCompatActivity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
     }
-
 }
