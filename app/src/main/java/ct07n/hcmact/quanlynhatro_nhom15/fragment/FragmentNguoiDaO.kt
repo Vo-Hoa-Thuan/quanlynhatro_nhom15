@@ -102,9 +102,10 @@ class FragmentNguoiDaO : Fragment() {
                 dialogBinding.edSDTThemNguoiDung.text.toString(),
                 dialogBinding.edQueQuanThemNguoiDung.text.toString(),
                 dialogBinding.edCCCDThemNguoiDung.text.toString(),
+                maPhong,
                 0,
-                0,
-                maPhong
+                0
+
             )
 
             nguoiDungApiService.insert(nguoiDung).enqueue(object : Callback<Void> {

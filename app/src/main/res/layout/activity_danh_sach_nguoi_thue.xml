@@ -20,13 +20,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        >
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabDanhSachNguoiThue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </androidx.cardview.widget.CardView>
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:layout_width="match_parent"

@@ -32,9 +32,10 @@
                 android:paddingLeft="10dp"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/tvTenChuTro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Võ Hòa Thuận"
+                    android:text="Tên Chủ Trọ"
                     android:textSize="25dp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -88,3 +89,4 @@
         android:background="#AEAEAE"
         />
 </LinearLayout>
+
