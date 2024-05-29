@@ -30,7 +30,10 @@ interface PhongApiService {
     fun getPhongById(@Path("id") id: String): Call<Phong>
 
     @GET("phong/{id}/ten")
-    fun getTenPhongById(@Path("id") id: String): Call<String>
+    fun getTenPhongById(@Path("id") id: String): Call<TenPhongResponse>
+
+    data class TenPhongResponse(val ten_phong: String)
+
 
     @GET("phong/chua-co-hop-dong/{maKhu}")
     fun getPhongChuaCoHopDong(@Path("maKhu") maKhu: String): Call<List<Phong>>

@@ -1,10 +1,12 @@
 package ct07n.hcmact.quanlynhatro_nhom15.adapter
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Telephony
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -20,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NguoiThueViewHolder(
-    val binding: LayoutItemNguoiThueBinding
+    private val binding: LayoutItemNguoiThueBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -28,17 +30,21 @@ class NguoiThueViewHolder(
         val phongApiService = PhongApiService.getInstance()
         val nguoidungApiService = NguoidungApiService.getInstance()
 
-        phongApiService.getTenPhongById(nguoiDung.ma_phong).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        phongApiService.getTenPhongById(nguoiDung.ma_phong).enqueue(object : Callback<PhongApiService.TenPhongResponse> {
+            override fun onResponse(call: Call<PhongApiService.TenPhongResponse>, response: Response<PhongApiService.TenPhongResponse>) {
                 if (response.isSuccessful) {
-                    binding.tvTenPhong.text = response.body() ?: "N/A"
+                    val tenPhongResponse = response.body()
+                    val tenPhong = tenPhongResponse?.ten_phong ?: "N/A"
+                    binding.tvTenPhong.text = tenPhong
                 } else {
                     binding.tvTenPhong.text = "N/A"
+                    Log.e(ContentValues.TAG, "Failed to retrieve room name: ${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<PhongApiService.TenPhongResponse>, t: Throwable) {
                 binding.tvTenPhong.text = "N/A"
+                Log.e(ContentValues.TAG, "Error retrieving room name: ${t.message}")
             }
         })
 
@@ -123,8 +129,8 @@ class NguoiThueViewHolder(
 }
 
 class NguoiThueAdapter(
-    val listNguoiDung: List<NguoiDung>,
-    val onClick: KhachThueInterface
+    private var listNguoiDung: List<NguoiDung>,
+    private val onClick: KhachThueInterface
 ) : RecyclerView.Adapter<NguoiThueViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NguoiThueViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -143,5 +149,10 @@ class NguoiThueAdapter(
         holder.itemView.setOnClickListener {
             onClick.OnClickKhachThue(position)
         }
+    }
+
+    fun updateList(newList: List<NguoiDung>) {
+        listNguoiDung = newList
+        notifyDataSetChanged()
     }
 }

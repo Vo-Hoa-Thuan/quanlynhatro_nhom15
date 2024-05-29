@@ -164,9 +164,10 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                         binding.edQueQuanSuaNguoiDung.text.toString(),
                         binding.edSDTSuaNguoiDung.text.toString(),
                         binding.edCCCDSuaNguoiDung.text.toString(),
+                        maPhong,
                         nguoiDung.trang_thai_chu_hop_dong,
-                        nguoiDung.trang_thai_o,
-                        maPhong
+                        nguoiDung.trang_thai_o
+
                     )
 
                     nguoidungApiService.update(nguoiDung.ma_nguoi_dung, nguoiDungUpdate).enqueue(object : Callback<Void> {
