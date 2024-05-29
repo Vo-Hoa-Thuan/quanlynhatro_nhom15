@@ -13,7 +13,6 @@ import ct07n.hcmact.quanlynhatro_nhom15.adapter.*
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
-import ct07n.hcmact.quanlynhatro_nhom15.databinding.DialogThemLoaiDichVuBinding
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.FragmentThongTinBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import ct07n.hcmact.quanlynhatro_nhom15.model.NguoiDung
@@ -21,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
+import android.text.Editable
 
 class FragmentThongTin : Fragment() {
     private lateinit var binding: FragmentThongTinBinding
@@ -42,7 +42,6 @@ class FragmentThongTin : Fragment() {
         maPhong = srf.getString(MA_PHONG_TRONG_CHI_TIET_PHONG,"")!!
         context = binding.root.context
 
-        // Không cần sử dụng DAO nữa, thay vào đó sử dụng Retrofit để lấy thông tin phòng
         phongApiService.getPhongById(maPhong).enqueue(object : Callback<Phong> {
             override fun onResponse(call: Call<Phong>, response: Response<Phong>) {
                 if (response.isSuccessful) {
@@ -63,16 +62,36 @@ class FragmentThongTin : Fragment() {
         return binding.root
     }
 
+
     private fun setUpView() {
-        val soNguoiO = phong.so_nguoi_o
         binding.edChiTietTenPhong.setText(phong.ten_phong)
         binding.edChiTietDienTich.setText(phong.dien_tich.toString())
         binding.edGiaThue.setText(phong.gia_thue.toString())
-        binding.tvSoNguoiHienTai.setText(soNguoiO.toString())
         binding.edSoNguoiOToiDa.setText(phong.so_nguoi_o.toString())
 
+        var soNguoiDangO = 0
+
+        nguoiDungApiService.getListNguoiDungByMaPhong(maPhong).enqueue(object : Callback<List<NguoiDung>> {
+            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
+                if (response.isSuccessful) {
+                    val nguoiDungList = response.body() ?: listOf()
+                    soNguoiDangO = nguoiDungList.size
+                    binding.tvSoNguoiHienTai.text = Editable.Factory.getInstance().newEditable(soNguoiDangO.toString())
+
+                } else {
+                    // Xử lý khi có lỗi từ server
+                    Log.e("FragmentThongTin", "Error: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
+                // Xử lý khi có lỗi từ mạng
+                Log.e("FragmentThongTin", "Network Error: ${t.message}")
+            }
+        })
+
         binding.btnXoaPhong.setOnClickListener {
-            val soNguoiTrongPhong = soNguoiO
+            val soNguoiTrongPhong = soNguoiDangO
             if (soNguoiTrongPhong <= 0) {
                 phongApiService.xoaPhongById(maPhong).enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
