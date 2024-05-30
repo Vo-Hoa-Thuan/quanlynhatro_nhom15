@@ -46,9 +46,6 @@ class FragmentNguoiDaO : Fragment() {
 
         setupRecyclerView()
 
-        binding.imgAddNguoiThue.setOnClickListener {
-            showAddNguoiThueDialog()
-        }
 
         return binding.root
     }

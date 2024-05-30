@@ -6,9 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
+import ct07n.hcmact.quanlynhatro_nhom15.api.KhuTroApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.ActivityThemPhongBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
+import ct07n.hcmact.quanlynhatro_nhom15.model.KhuTro
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,6 +54,8 @@ class ActivityThemPhong : AppCompatActivity() {
 
             // Gọi API để thêm phòng mới
             addNewRoom(phong)
+            // Gọi API để đếm tổng số phòng trong khu trọ
+
         }
 
         binding.btnHuyThemPhong.setOnClickListener {
@@ -69,7 +73,7 @@ class ActivityThemPhong : AppCompatActivity() {
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    thongBaoThanhCong("Thêm phòng thành công")
+                    updateRoomCount()
                 } else {
                     thongBaoLoi("Thêm phòng thất bại")
                 }
@@ -77,6 +81,25 @@ class ActivityThemPhong : AppCompatActivity() {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 thongBaoLoi("Lỗi khi thêm phòng: ${t.message}")
+            }
+        })
+    }
+
+
+    private fun updateRoomCount() {
+        val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
+        val call = phongApiService.updateSoLuongPhongByMaKhu(maKhu)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    thongBaoThanhCong("Thêm phòng thành công")
+                } else {
+                    thongBaoLoi("Cập nhật số lượng phòng thất bại")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                thongBaoLoi("Lỗi khi cập nhật số lượng phòng: ${t.message}")
             }
         })
     }
