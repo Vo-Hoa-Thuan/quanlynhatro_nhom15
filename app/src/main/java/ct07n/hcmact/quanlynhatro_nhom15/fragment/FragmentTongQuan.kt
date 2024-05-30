@@ -69,7 +69,14 @@ class FragmentTongQuan : Fragment() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(maKhuListener)
     }
 
-    // Phương thức để cập nhật dữ liệu khu trọ và giao diện
+    override fun onResume() {
+        super.onResume()
+        fetchKhuTroDataAndSetupUI()
+        fetchPhongDataAndSetupUI()
+        setupButtonClickListeners()
+    }
+
+  // Phương thức để cập nhật dữ liệu khu trọ và giao diện
     private fun fetchKhuTroDataAndSetupUI() {
         val admin = requireContext().getSharedPreferences(THONG_TIN_DANG_NHAP, AppCompatActivity.MODE_PRIVATE)
             .getString(USERNAME_KEY, "")!!

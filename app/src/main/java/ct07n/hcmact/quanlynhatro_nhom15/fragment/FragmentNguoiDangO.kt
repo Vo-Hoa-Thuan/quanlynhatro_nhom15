@@ -19,7 +19,6 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.NguoiDung
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 class FragmentNguoiDangO : Fragment() {
     private lateinit var binding: FragmentNguoiDangOBinding
     private var maKhu = ""
@@ -44,6 +43,26 @@ class FragmentNguoiDangO : Fragment() {
         setupRecyclerView()
 
         // Gọi API để lấy danh sách người dùng đang ở
+        fetchNguoiDungData()
+
+        // Lắng nghe sự kiện nút tìm kiếm
+        binding.searchTenPhong.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searchByTenPhong(newText)
+                }
+                return false
+            }
+        })
+
+        return binding.root
+    }
+
+    private fun fetchNguoiDungData() {
         nguoiDungApiService.getAllInNguoiDangOByMaKhu(maKhu).enqueue(object : Callback<List<NguoiDung>> {
             override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
                 if (response.isSuccessful) {
@@ -58,8 +77,24 @@ class FragmentNguoiDangO : Fragment() {
                 // Xử lý lỗi nếu cần
             }
         })
+    }
 
-        return binding.root
+    private fun searchByTenPhong(tenPhong: String) {
+        nguoiDungApiService.getAllInNguoiDangOByMaKhu(maKhu).enqueue(object : Callback<List<NguoiDung>> {
+            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
+                if (response.isSuccessful) {
+                    var list = response.body() ?: emptyList()
+                    list = list.filter { it.ho_ten_nguoi_dung.contains(tenPhong, ignoreCase = true) }
+                    nguoiThueAdapter.updateList(list)
+                } else {
+                    // Xử lý lỗi nếu cần
+                }
+            }
+
+            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
+                // Xử lý lỗi nếu cần
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -74,8 +109,6 @@ class FragmentNguoiDangO : Fragment() {
         binding.rcyNguoiDangO.adapter = nguoiThueAdapter
         binding.rcyNguoiDangO.layoutManager = LinearLayoutManager(activity)
     }
-
-
 
     // Các phương thức khác của FragmentNguoiDangO
 }
