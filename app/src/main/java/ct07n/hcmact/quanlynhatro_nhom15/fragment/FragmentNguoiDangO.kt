@@ -14,6 +14,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.adapter.KhachThueInterface
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.NguoiThueAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
+import ct07n.hcmact.quanlynhatro_nhom15.databinding.DialogThemKhachThueBinding
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.FragmentNguoiDangOBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.NguoiDung
 import retrofit2.Call

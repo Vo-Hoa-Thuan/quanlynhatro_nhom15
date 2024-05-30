@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.ViewpagerDanhSachNguoiThueAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.ActivityDanhSachNguoiThueBinding
@@ -24,6 +25,17 @@ class ActivityDanhSachNguoiThue : AppCompatActivity() {
 
         val adapter = ViewpagerDanhSachNguoiThueAdapter(supportFragmentManager, lifecycle)
         binding.viewpagerDanhSachNguoiThue.adapter = adapter
+        TabLayoutMediator(binding.tabDanhSachNguoiThue, binding.viewpagerDanhSachNguoiThue) { tab, pos ->
+            when (pos) {
+                0 -> {
+                    tab.text = "Đang ở"
+                }
+                1 -> {
+                    tab.text = "Đã ở"
+                }
+                else -> tab.text = "Đang ở"
+            }
+        }.attach()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

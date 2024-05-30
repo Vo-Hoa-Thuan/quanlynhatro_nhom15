@@ -46,10 +46,6 @@ class FragmentNguoiDaO : Fragment() {
 
         setupRecyclerView()
 
-        binding.imgAddNguoiThue.setOnClickListener {
-            showAddNguoiThueDialog()
-        }
-
         return binding.root
     }
 
@@ -90,47 +86,6 @@ class FragmentNguoiDaO : Fragment() {
                 showErrorSnackbar("Network request failed: ${t.message}")
             }
         })
-
-        dialogBinding.btnLuuThemNguoiDung.setOnClickListener {
-            // Thực hiện gọi API để đẩy dữ liệu lên database
-            val nguoiDungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
-            val maNguoiDung = UUID.randomUUID().toString()
-            val nguoiDung = NguoiDung(
-                maNguoiDung,
-                dialogBinding.edHoTenThemNguoiDung.text.toString(),
-                dialogBinding.edNgaySinhThemNguoiDung.text.toString(),
-                dialogBinding.edSDTThemNguoiDung.text.toString(),
-                dialogBinding.edQueQuanThemNguoiDung.text.toString(),
-                dialogBinding.edCCCDThemNguoiDung.text.toString(),
-                maPhong,
-                0,
-                0
-
-            )
-
-            nguoiDungApiService.insert(nguoiDung).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Snackbar.make(it, "Thêm người dùng thành công", Snackbar.LENGTH_SHORT).show()
-                        dialog.dismiss()
-                        onResume()
-                    } else {
-                        showErrorSnackbar("Failed to add người dùng")
-                    }
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    showErrorSnackbar("Network request failed: ${t.message}")
-                }
-            })
-        }
-
-        dialogBinding.btnHuyThemNguoiDung.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.setView(dialogBinding.root)
-        dialog.show()
     }
 
     private fun showErrorSnackbar(message: String) {
