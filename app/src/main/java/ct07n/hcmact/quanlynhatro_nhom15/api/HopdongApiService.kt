@@ -24,5 +24,15 @@ interface HopdongApiService {
 
 
     @GET("hopDong/{id}/tenNguoiDung")
-    fun getTenNguoiDungByIDHopDong(@Path("id") id: String): Call<String>
+    fun getTenNguoiDungByIDHopDong(@Path("id") id: String): Call<TenNguoiResponse>
+
+    data class TenNguoiResponse(
+        val ho_ten_nguoi_dung: String
+    )
+
+    @GET("hopDong/hanCon/{maKhu}")
+    fun getHopDongConHanByMaKhu(@Path("maKhu") maKhu: String): Call<List<HopDong>>;
+
+    @GET("hopDong/hanHet/{maKhu}")
+    fun getHopDongHetHanByMaKhu(@Path("maKhu") maKhu: String): Call<List<HopDong>>;
 }

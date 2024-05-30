@@ -46,9 +46,6 @@ class FragmentNguoiDaO : Fragment() {
 
         setupRecyclerView()
 
-        binding.imgAddNguoiThue.setOnClickListener {
-            showAddNguoiThueDialog()
-        }
 
         return binding.root
     }
@@ -75,11 +72,12 @@ class FragmentNguoiDaO : Fragment() {
         val dialog = AlertDialog.Builder(requireContext()).create()
 
         val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
-        phongApiService.getAllInPhongByMaKhu(maKhu).enqueue(object : Callback<List<Phong>> {
+        phongApiService.getAllPhong().enqueue(object : Callback<List<Phong>> {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
                     val listPhong = response.body() ?: emptyList()
-                    val spinnerAdapter = MaPhongSpinner(requireContext(), phongApiService)
+                    // Initialize MaPhongSpinner adapter with the list of Phong objects
+                    val spinnerAdapter = MaPhongSpinner(requireContext(), listPhong)
                     dialogBinding.spinnerThemNguoiDung.adapter = spinnerAdapter
                 } else {
                     showErrorSnackbar("Error loading phong data")
