@@ -190,21 +190,6 @@
                  android:layout_marginRight="2dp"
                  android:background="#656464" />
 
-             <androidx.recyclerview.widget.RecyclerView
-                 android:id="@+id/rcvListLoaiDichVu"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
-
-             <Button
-                 android:id="@+id/btnThemDichVu"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center"
-                 android:layout_marginTop="20dp"
-                 android:textColor="@color/white"
-                 android:layout_marginBottom="10dp"
-                 android:backgroundTint="@color/mauChinhApp"
-                 android:text="Thêm hoặc xóa dịch vụ" />
          </LinearLayout>
 
          <LinearLayout

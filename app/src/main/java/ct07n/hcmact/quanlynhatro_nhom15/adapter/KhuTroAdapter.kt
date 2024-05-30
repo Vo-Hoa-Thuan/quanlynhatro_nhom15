@@ -17,6 +17,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.util.Log
 
 const val MA_KHU_KEY = "ma_khu"
 const val TEN_KHU_KEY = "ten_khu_tro"
@@ -63,6 +64,7 @@ class KhuTroViewHolder(
 
         binding.btnQuanLyKhuTro.setOnClickListener {
             onKhuTroSelected(khuTro)
+            Log.d("KhuTroAdapter", "Selected khuTro: ${khuTro.ten_khu_tro}")
         }
 
         if (maKhu == khuTro.ma_khu_tro) {
