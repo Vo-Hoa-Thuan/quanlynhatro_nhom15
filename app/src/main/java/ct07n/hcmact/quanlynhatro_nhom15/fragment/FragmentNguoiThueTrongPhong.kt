@@ -17,6 +17,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.NguoiDung
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.create
 
 class FragmentNguoiThueTrongPhong : Fragment() {
     private var maKhu=""
