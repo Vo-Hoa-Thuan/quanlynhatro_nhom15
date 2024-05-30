@@ -1,11 +1,11 @@
 package ct07n.hcmact.quanlynhatro_nhom15.activity
 
-import android.content.DialogInterface
+import android.content.ContentValues
 import android.graphics.Color
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.MenuItem
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -51,28 +51,14 @@ class ActivityKetThucHopDong : AppCompatActivity() {
         val hopDong: HopDong = intent.getSerializableExtra("hopDong") as HopDong
 
         loadTenPhong(hopDong.ma_phong)
-//        loadTenKhuTro()
         binding.tvSoTienCocXuLyPhong.text = "${hopDong.tien_coc}"
         binding.chkThanhToanXuLy.isEnabled = false
         binding.chkKiemTraXuLyPhong.isEnabled = false
 
-        if (hopDong.trang_thai_hop_dong == 0) {
-            binding.tvThoiHanXuLyHopDong.text = "Hết hạn"
+            binding.tvThoiHanXuLyHopDong.text = ""
             binding.tvThoiHanXuLyHopDong.setTextColor(Color.RED)
             binding.tvNgayKetThucHopDong.text = chuyenDinhDangNgay(hopDong.ngay_hop_dong)
             binding.tvSoTienDenBuHopDong.text = "$tienCocDenBu"
-        } else if (hopDong.trang_thai_hop_dong == 1) {
-            binding.tvThoiHanXuLyHopDong.text = "Còn hạn"
-            binding.tvThoiHanXuLyHopDong.setTextColor(Color.BLACK)
-            binding.tvNgayKetThucHopDong.text = chuyenDinhDangNgay(simpleDateFormatNow.format(cNow.time))
-            tienCocDenBu = hopDong.tien_coc
-            binding.tvSoTienDenBuHopDong.text = "$tienCocDenBu"
-        } else {
-            binding.tvThoiHanXuLyHopDong.text = "Sắp hết hạn"
-            binding.tvThoiHanXuLyHopDong.setTextColor(Color.BLUE)
-            binding.tvNgayKetThucHopDong.text = chuyenDinhDangNgay(simpleDateFormatNow.format(cNow.time))
-            binding.tvSoTienDenBuHopDong.text = "$tienCocDenBu"
-        }
 
         binding.chkThietHai.setOnCheckedChangeListener { _, _ -> binding.layoutTienDenBu.isVisible = true }
 
@@ -136,9 +122,12 @@ class ActivityKetThucHopDong : AppCompatActivity() {
         phongApiService.getTenPhongById(maPhong).enqueue(object : Callback<PhongApiService.TenPhongResponse> {
             override fun onResponse(call: Call<PhongApiService.TenPhongResponse>, response: Response<PhongApiService.TenPhongResponse>) {
                 if (response.isSuccessful) {
-                    binding.tvTenPhongXuLyPhong.text = response.body().toString()
+                    val tenPhongResponse = response.body()
+                    val tenPhong = tenPhongResponse?.ten_phong ?: "N/A"
+                    binding.tvTenPhongXuLyPhong.text = tenPhong
                 } else {
-                    thongBaoLoi("Không thể tải tên phòng")
+                    binding.tvTenPhongXuLyPhong.text = "N/A"
+                    Log.e(ContentValues.TAG, "Failed to retrieve room name: ${response.code()}")
                 }
             }
 
@@ -148,24 +137,6 @@ class ActivityKetThucHopDong : AppCompatActivity() {
         })
     }
 
-//    private fun loadTenKhuTro() {
-//        val khuTroApiService = RetrofitClient.instance.create(KhuTroApiService::class.java)
-//        khuTroApiService.getTenKhuTro().enqueue(object : Callback<String> {
-//            override fun onResponse(call: Call<String>, response: Response<String>) {
-//                if (response.isSuccessful) {
-//                    binding.tvTenKhuXuLyPhong.text = "Khu: ${response.body()}"
-//                } else {
-//                    thongBaoLoi("Không thể tải tên khu trọ")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<String>, t: Throwable) {
-//                thongBaoLoi("Lỗi kết nối: ${t.message}")
-//            }
-//
-//        })
-//    }
-
     private fun updateHD(hopDong: HopDong) {
         val hopDongNew = hopDong.copy(
             ngay_hop_dong = chuyenDinhDangNgayChuan(binding.tvNgayKetThucHopDong.text.toString()),
@@ -173,7 +144,7 @@ class ActivityKetThucHopDong : AppCompatActivity() {
             hieu_luc_hop_dong = 0
         )
         val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
-        hopDongApiService.updateHopDong(hopDong, hopDongNew).enqueue(object : Callback<Void> {
+        hopDongApiService.deleteHopDong(hopDong.ma_hop_dong).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     updatePhongAndNguoiDung(hopDong.ma_phong)
@@ -206,40 +177,30 @@ class ActivityKetThucHopDong : AppCompatActivity() {
     }
 
     private fun loadNguoiDungTrongPhong(maPhong: String) {
-        val NguoidungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
-        NguoidungApiService.getNguoiDungByMaPhong(maPhong).enqueue(object : Callback<List<NguoiDung>> {
-            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
+        val nguoiDungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
+        nguoiDungApiService.deleteByRoomId(maPhong).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    val listNDTrongPhong = response.body()!!
-                    var count = 0
-                    for (nguoiDung in listNDTrongPhong) {
-                        updateNDTrongPhong(nguoiDung) {
-                            count++
-                            if (count == listNDTrongPhong.size) {
-                                thongBaoThanhCong("Kết thúc hợp đồng thành công!")
-                            }
-                        }
-                    }
+                    thongBaoThanhCong("Kết thúc hợp đồng thành công")
                 } else {
                     thongBaoLoi("Không thể tải người dùng trong phòng")
                 }
             }
 
-            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 thongBaoLoi("Lỗi kết nối: ${t.message}")
             }
         })
     }
 
-    private fun updateNDTrongPhong(nguoiDung: NguoiDung, onSuccess: () -> Unit) {
-        val nguoiDungNew = nguoiDung.copy(trang_thai_chu_hop_dong = 0, trang_thai_o = 0)
-        val NguoidungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
-        NguoidungApiService.update(nguoiDung.ma_nguoi_dung,nguoiDungNew).enqueue(object : Callback<Void> {
+    private fun deleteNguoiDung(nguoiDung: NguoiDung, onSuccess: () -> Unit) {
+        val nguoiDungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
+        nguoiDungApiService.delete(nguoiDung.ma_nguoi_dung).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     onSuccess()
                 } else {
-                    thongBaoLoi("Không thể cập nhật người dùng")
+                    thongBaoLoi("Không thể xóa người dùng")
                 }
             }
 

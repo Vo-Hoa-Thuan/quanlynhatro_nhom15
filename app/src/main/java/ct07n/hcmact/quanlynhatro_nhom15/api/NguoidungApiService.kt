@@ -18,6 +18,9 @@ interface NguoidungApiService {
     @DELETE("nguoidung/{ma_nguoi_dung}")
     fun delete(@Path("ma_nguoi_dung") maNguoiDung: String): Call<Void>
 
+    @DELETE("nguoidung/phong/{ma_phong}")
+    fun deleteByRoomId(@Path("ma_phong") maPhong: String): Call<Void>
+
     @PUT("nguoidung/{ma_nguoi_dung}")
     fun update(@Path("ma_nguoi_dung") maNguoiDung: String, @Body nguoiDung: NguoiDung): Call<Void>
 

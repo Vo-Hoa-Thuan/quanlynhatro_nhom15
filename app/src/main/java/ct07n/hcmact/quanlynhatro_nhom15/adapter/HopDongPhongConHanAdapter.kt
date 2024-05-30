@@ -101,9 +101,12 @@ class HopDongPhongConHanViewHolder(
         phongApiService.getTenPhongById(hopDong.ma_phong).enqueue(object : Callback<PhongApiService.TenPhongResponse> {
             override fun onResponse(call: Call<PhongApiService.TenPhongResponse>, response: Response<PhongApiService.TenPhongResponse>) {
                 if (response.isSuccessful) {
-                    dialog.tvChiTietHDTenPhong.text = "Phòng: " + response.body()
+                    val tenPhongResponse = response.body()
+                    val tenPhong = tenPhongResponse?.ten_phong ?: "N/A"
+                    dialog.tvChiTietHDTenPhong.text = tenPhong
                 } else {
-                    showToast("Không thể tải tên phòng")
+                    binding.tvDanhSachHopDongTenPhong.text = "N/A"
+                    Log.e(ContentValues.TAG, "Failed to retrieve room name: ${response.code()}")
                 }
             }
 
@@ -111,17 +114,21 @@ class HopDongPhongConHanViewHolder(
                 showToast("Lỗi kết nối: ${t.message}")
             }
         })
-        val HopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
-        HopDongApiService.getTenNguoiDungByIDHopDong(hopDong.ma_hop_dong).enqueue(object : Callback<HopdongApiService.TenNguoiResponse> {
+        val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
+        hopDongApiService.getTenNguoiDungByIDHopDong(hopDong.ma_hop_dong).enqueue(object : Callback<HopdongApiService.TenNguoiResponse> {
             override fun onResponse(call: Call<HopdongApiService.TenNguoiResponse>, response: Response<HopdongApiService.TenNguoiResponse>) {
                 if (response.isSuccessful) {
-                    dialog.tvChiTietHDTenNguoiDung.text = "Họ và tên: " + response.body()
+                    val tenNguoiResponse = response.body()
+                    val tenNguoiDung = tenNguoiResponse?.ho_ten_nguoi_dung ?: "N/A"
+                    dialog.tvChiTietHDTenNguoiDung.text = "Họ và tên: $tenNguoiDung"
                 } else {
+                    binding.tvDanhSachHopDongTenThanhVien.text = "N/A"
                     showToast("Không thể tải tên người dùng")
                 }
             }
 
             override fun onFailure(call: Call<HopdongApiService.TenNguoiResponse>, t: Throwable) {
+                binding.tvDanhSachHopDongTenThanhVien.text = "N/A"
                 showToast("Lỗi kết nối: ${t.message}")
             }
         })
@@ -132,11 +139,7 @@ class HopDongPhongConHanViewHolder(
             tvChiTietHDNgayHopDong.text = "Ngày kết thúc: ${chuyenDinhDangNgay(hopDong.ngay_hop_dong)}"
             tvNgayLapHopDong.text = "Ngày lập hợp đồng: ${chuyenDinhDangNgay(hopDong.ngay_lap_hop_dong)}"
             tvChiTietHDTienCoc.text = "Tiền cọc: ${hopDong.tien_coc}"
-            tvChiTietHDTrangThai.text = when (hopDong.trang_thai_hop_dong) {
-                1 -> "Tình trạng hợp đồng: Còn hợp đồng"
-                0 -> "Tình trạng hợp đồng: Hết hợp đồng"
-                else -> "Tình trạng hợp đồng: Sắp hết hợp đồng"
-            }
+            tvChiTietHDTrangThai.text = ""
         }
     }
 
