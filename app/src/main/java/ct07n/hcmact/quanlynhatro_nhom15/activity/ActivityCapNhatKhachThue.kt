@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinner
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinnerAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
@@ -61,8 +61,8 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
                     val listPhong = response.body() ?: emptyList()
-//                    val spinnerAdapter = MaPhongSpinner(this@ActivityCapNhatKhachThue, phongApiService)
-//                    binding.spinnerSuaNguoiDung.adapter = spinnerAdapter
+                    val spinnerAdapter = MaPhongSpinnerAdapter(this@ActivityCapNhatKhachThue, listPhong)
+                    binding.spinnerSuaNguoiDung.adapter = spinnerAdapter
                     binding.spinnerSuaNguoiDung.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             maPhong = listPhong[position].ma_phong
@@ -71,29 +71,23 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {}
                     }
-
-                    var posND = 0
-                    for (i in listPhong.indices) {
-                        if (nguoiDung.ma_phong == listPhong[i].ma_phong) {
-                            posND = i
-                        }
-                    }
-
-                    binding.spinnerSuaNguoiDung.setSelection(posND)
                 } else {
-                    thongBaoLoi("Không thể tải danh sách phòng")
+                    // Xử lý khi phản hồi không thành công
+                    Toast.makeText(this@ActivityCapNhatKhachThue, "Không thể tải danh sách phòng", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Phong>>, t: Throwable) {
-                thongBaoLoi("Lỗi kết nối: ${t.message}")
+                // Xử lý khi gọi API thất bại
+                Toast.makeText(this@ActivityCapNhatKhachThue, "Lỗi kết nối: " + t.message, Toast.LENGTH_SHORT).show()
             }
         })
 
-        nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+
+        nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<NguoidungApiService.MaNguoiDangOResponse> {
+            override fun onResponse(call: Call<NguoidungApiService.MaNguoiDangOResponse>, response: Response<NguoidungApiService.MaNguoiDangOResponse>) {
                 if (response.isSuccessful) {
-                    val maNguoiDangO = response.body()
+                    val maNguoiDangO = response.body()?.ma_nguoi_dang_o
                     if (nguoiDung.ma_nguoi_dung != maNguoiDangO) {
                         binding.spinnerSuaNguoiDung.visibility = View.VISIBLE
                     } else {
@@ -106,7 +100,7 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<NguoidungApiService.MaNguoiDangOResponse>, t: Throwable) {
                 thongBaoLoi("Lỗi kết nối: ${t.message}")
             }
         })

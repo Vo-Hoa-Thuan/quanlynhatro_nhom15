@@ -106,7 +106,7 @@ class ActivitytaoHopDongMoi : AppCompatActivity() {
                         que_quan = dialog.edQueQuanThemNguoiDung.text.toString(),
                         sdt_nguoi_dung = dialog.edSDTThemNguoiDung.text.toString(),
                         ma_phong = maPhong,trang_thai_o = 1,
-                        trang_thai_chu_hop_dong = 0,
+                        trang_thai_chu_hop_dong = 1,
                     )
                     NguoidungApiService.insert(nguoiDung).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {

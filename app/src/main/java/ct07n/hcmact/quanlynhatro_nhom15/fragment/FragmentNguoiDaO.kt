@@ -22,7 +22,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.model.NguoiDung
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.KhachThueInterface // Import interface
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinner
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinnerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -77,7 +77,7 @@ class FragmentNguoiDaO : Fragment() {
                 if (response.isSuccessful) {
                     val listPhong = response.body() ?: emptyList()
                     // Initialize MaPhongSpinner adapter with the list of Phong objects
-                    val spinnerAdapter = MaPhongSpinner(requireContext(), listPhong)
+                    val spinnerAdapter = MaPhongSpinnerAdapter(requireContext(), listPhong)
                     dialogBinding.spinnerThemNguoiDung.adapter = spinnerAdapter
                 } else {
                     showErrorSnackbar("Error loading phong data")

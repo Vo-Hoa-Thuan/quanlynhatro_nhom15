@@ -12,6 +12,9 @@ interface NguoidungApiService {
     @POST("nguoidung")
     fun insert(@Body nguoiDung: NguoiDung): Call<Void>
 
+    @GET("nguoidung/{maPhong}/manguoidango")
+    fun getMaNguoiDangOByMaPhong(@Path("maPhong") maPhong: String): Call<MaNguoiDangOResponse>
+
     @GET("nguoidung/{ma_nguoi_dung}")
     fun getById(@Path("ma_nguoi_dung") maNguoiDung: String): Call<NguoiDung>
 
@@ -63,12 +66,10 @@ interface NguoidungApiService {
     @GET("nguoidung/{maPhong}/tennguoidao")
     fun getTenNguoiDaOByMaPhong(@Path("maPhong") maPhong: String): Call<String>
 
-    @GET("nguoidung/{maPhong}/manguoidango")
-    fun getMaNguoiDangOByMaPhong(@Path("maPhong") maPhong: String): Call<String>
-
     @PUT("nguoidung/{maPhong}/updatetrangthaidao")
     fun updateTrangThaiNguoiDungThanhDaO(@Path("maPhong") maPhong: String): Call<Void>
 
+    data class MaNguoiDangOResponse(val ma_nguoi_dang_o: String)
     companion object {
         fun getInstance(): NguoidungApiService {
             return RetrofitClient.instance.create(NguoidungApiService::class.java)
@@ -76,3 +77,4 @@ interface NguoidungApiService {
     }
 
 }
+

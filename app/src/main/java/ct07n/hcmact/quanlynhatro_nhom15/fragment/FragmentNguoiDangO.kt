@@ -17,7 +17,7 @@ import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityCapNhatKhachThue
 import ct07n.hcmact.quanlynhatro_nhom15.activity.FILE_NAME
 import ct07n.hcmact.quanlynhatro_nhom15.activity.MA_KHU_KEY
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.KhachThueInterface
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinner
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.MaPhongSpinnerAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.adapter.NguoiThueAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
@@ -58,6 +58,30 @@ class FragmentNguoiDangO : Fragment() {
         setupRecyclerView()
 
         // Gọi API để lấy danh sách người dùng đang ở
+        fetchNguoiDungData()
+
+        // Lắng nghe sự kiện nút tìm kiếm
+        binding.searchTenPhong.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searchByTenPhong(newText)
+                }
+                return false
+            }
+        })
+
+        binding.imgAddNguoiThue.setOnClickListener {
+            showAddNguoiThueDialog()
+        }
+
+        return binding.root
+    }
+
+    private fun fetchNguoiDungData() {
         nguoiDungApiService.getAllInNguoiDangOByMaKhu(maKhu).enqueue(object : Callback<List<NguoiDung>> {
             override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
                 if (response.isSuccessful) {
@@ -72,13 +96,25 @@ class FragmentNguoiDangO : Fragment() {
                 // Xử lý lỗi nếu cần
             }
         })
+    }
 
-        // Setup thêm người dùng
-        binding.imgAddNguoiThue.setOnClickListener {
-            showAddNguoiThueDialog()
-        }
 
-        return binding.root
+    private fun searchByTenPhong(tenPhong: String) {
+        nguoiDungApiService.getAllInNguoiDangOByMaKhu(maKhu).enqueue(object : Callback<List<NguoiDung>> {
+            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
+                if (response.isSuccessful) {
+                    var list = response.body() ?: emptyList()
+                    list = list.filter { it.ho_ten_nguoi_dung.contains(tenPhong, ignoreCase = true) }
+                    nguoiThueAdapter.updateList(list)
+                } else {
+                    // Xử lý lỗi nếu cần
+                }
+            }
+
+            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
+                // Xử lý lỗi nếu cần
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -102,7 +138,7 @@ class FragmentNguoiDangO : Fragment() {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
                     val listPhong = response.body() ?: emptyList()
-                    val spinnerAdapter = MaPhongSpinner(requireActivity(), listPhong)
+                    val spinnerAdapter = MaPhongSpinnerAdapter(requireActivity(), listPhong)
                     dialogBinding.spinnerThemNguoiDung.adapter = spinnerAdapter
                     dialogBinding.spinnerThemNguoiDung.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -173,7 +209,6 @@ class FragmentNguoiDangO : Fragment() {
         super.onResume()
         reload()
     }
-
     private fun reload() {
         nguoiDungApiService.getAllInNguoiDangOByMaKhu(maKhu).enqueue(object : Callback<List<NguoiDung>> {
             override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
@@ -191,4 +226,5 @@ class FragmentNguoiDangO : Fragment() {
             }
         })
     }
+
 }

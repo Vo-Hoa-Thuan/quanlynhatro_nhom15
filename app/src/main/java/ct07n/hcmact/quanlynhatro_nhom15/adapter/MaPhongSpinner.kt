@@ -10,7 +10,9 @@ import android.widget.TextView
 import ct07n.hcmact.quanlynhatro_nhom15.R
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 
-class MaPhongSpinner(reContext: Context, val list: List<Phong>): ArrayAdapter<Phong>(reContext,R.layout.layout_item_spinner_ma_phong){
+class MaPhongSpinnerAdapter(context: Context, val list: List<Phong>)
+    : ArrayAdapter<Phong>(context, R.layout.layout_item_spinner_ma_phong, list) {
+
     override fun getCount(): Int {
         return list.size
     }
@@ -22,12 +24,13 @@ class MaPhongSpinner(reContext: Context, val list: List<Phong>): ArrayAdapter<Ph
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initView(position, convertView, parent)
     }
-    @SuppressLint("MissingInflatedId")
 
-    private fun initView(position: Int, convertView: View?, parent: ViewGroup): View{
-        val rowView : View = LayoutInflater.from(context).inflate(R.layout.layout_item_spinner_ma_phong,parent,false)
-        val tvTenPhong = rowView.findViewById<TextView>(R.id.tvTenPhongSpinner)
-        tvTenPhong.text = list[position].ten_phong
-        return rowView
+    @SuppressLint("MissingInflatedId")
+    private fun initView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.layout_item_spinner_ma_phong, parent, false)
+        val tvTenPhong = view.findViewById<TextView>(R.id.tvTenPhongSpinner)
+        val phong = list[position]
+        tvTenPhong.text = phong.ten_phong
+        return view
     }
 }

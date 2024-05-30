@@ -51,19 +51,26 @@ class NguoiThueViewHolder(
         binding.tvMaNguoiDung.text = nguoiDung.ma_nguoi_dung
         binding.tvSDT.text = "SĐT: ${nguoiDung.sdt_nguoi_dung}"
         binding.tvTenNguoiThue.text = "Họ tên: ${nguoiDung.ho_ten_nguoi_dung}"
-        binding.edTrangThaiO.isChecked = nguoiDung.trang_thai_o == 1
+        binding.edTrangThaiO.isChecked = nguoiDung.trang_thai_o == 0
 
-        nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        // Sử dụng API để lấy mã người đang ở
+        nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<NguoidungApiService.MaNguoiDangOResponse> {
+            override fun onResponse(call: Call<NguoidungApiService.MaNguoiDangOResponse>, response: Response<NguoidungApiService.MaNguoiDangOResponse>) {
                 if (response.isSuccessful) {
-                    binding.edTrangThaiChuHopDong.isChecked = nguoiDung.ma_nguoi_dung == response.body()
+                    val maNguoiDangO = response.body()?.ma_nguoi_dang_o
+                    // Thiết lập trạng thái CheckBox cho chủ hợp đồng
+                    binding.edTrangThaiChuHopDong.isChecked = nguoiDung.ma_nguoi_dung == maNguoiDangO
+                    // Log để kiểm tra dữ liệu
+                    Log.d("BindViewHolder", "MaNguoiDangO: $maNguoiDangO")
                 } else {
                     binding.edTrangThaiChuHopDong.isChecked = false
+                    Log.e(ContentValues.TAG, "Failed to retrieve maNguoiDangO: ${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<NguoidungApiService.MaNguoiDangOResponse>, t: Throwable) {
                 binding.edTrangThaiChuHopDong.isChecked = false
+                Log.e(ContentValues.TAG, "Error retrieving maNguoiDangO: ${t.message}")
             }
         })
 
@@ -75,28 +82,28 @@ class NguoiThueViewHolder(
         }
 
         binding.layoutChuyenChiTietNguoiThue.setOnClickListener {
-            val dialog = DialogChiTietNguoiThueBinding.inflate(LayoutInflater.from(binding.root.context))
+            val dialogBinding = DialogChiTietNguoiThueBinding.inflate(LayoutInflater.from(binding.root.context))
             val bottomSheetDialog = BottomSheetDialog(binding.root.context)
 
-            bottomSheetDialog.setContentView(dialog.root)
-            dialog.tvChiTietNguoiDungTenPhong.text = "Tên phòng: ${binding.tvTenPhong.text}"
-            dialog.tvChiTietNguoiThueHoTen.text = nguoiDung.ho_ten_nguoi_dung
-            dialog.tvChiTietNguoiThueSDT.text = nguoiDung.sdt_nguoi_dung
-            dialog.tvChiTietNguoiThueNgaySinh.text = nguoiDung.nam_sinh
-            dialog.tvChiTietNguoiThueCCCD.text = nguoiDung.cccd
-            dialog.tvChiTietNguoiThueQueQuan.text = nguoiDung.que_quan
+            bottomSheetDialog.setContentView(dialogBinding.root)
+            dialogBinding.tvChiTietNguoiDungTenPhong.text = "Tên phòng: ${binding.tvTenPhong.text}"
+            dialogBinding.tvChiTietNguoiThueHoTen.text = nguoiDung.ho_ten_nguoi_dung
+            dialogBinding.tvChiTietNguoiThueSDT.text = nguoiDung.sdt_nguoi_dung
+            dialogBinding.tvChiTietNguoiThueNgaySinh.text = nguoiDung.nam_sinh
+            dialogBinding.tvChiTietNguoiThueCCCD.text = nguoiDung.cccd
+            dialogBinding.tvChiTietNguoiThueQueQuan.text = nguoiDung.que_quan
 
-            nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    dialog.tvLoaiNguoiThue.text = if (nguoiDung.ma_nguoi_dung == response.body()) "Là chủ hợp đồng" else "Là thành viên"
+            nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<NguoidungApiService.MaNguoiDangOResponse> {
+                override fun onResponse(call: Call<NguoidungApiService.MaNguoiDangOResponse>, response: Response<NguoidungApiService.MaNguoiDangOResponse>) {
+                    dialogBinding.tvLoaiNguoiThue.text = if (nguoiDung.ma_nguoi_dung == response.body()?.ma_nguoi_dang_o) "Là chủ hợp đồng" else "Là thành viên"
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    dialog.tvLoaiNguoiThue.text = "Là thành viên"
+                override fun onFailure(call: Call<NguoidungApiService.MaNguoiDangOResponse>, t: Throwable) {
+                    dialogBinding.tvLoaiNguoiThue.text = "Là thành viên"
                 }
             })
 
-            dialog.btnDongChiTietNguoiThue.setOnClickListener {
+            dialogBinding.btnDongChiTietNguoiThue.setOnClickListener {
                 bottomSheetDialog.dismiss()
             }
 
@@ -111,14 +118,11 @@ class NguoiThueViewHolder(
             putExtra("address", "+$sdt")
             putExtra("sms_body", message)
         }
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                val defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(context)
-                if (defaultSmsPackageName != null) intent.setPackage(defaultSmsPackageName)
-                context.startActivity(intent)
-            }
-            else -> context.startActivity(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(context)
+            if (defaultSmsPackageName != null) intent.setPackage(defaultSmsPackageName)
         }
+        context.startActivity(intent)
     }
 
     private fun goiDien(sdt: String, context: Context) {
@@ -127,6 +131,7 @@ class NguoiThueViewHolder(
         context.startActivity(dialIntent)
     }
 }
+
 
 class NguoiThueAdapter(
     private var listNguoiDung: List<NguoiDung>,
