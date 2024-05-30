@@ -61,8 +61,8 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
                     val listPhong = response.body() ?: emptyList()
-                    val spinnerAdapter = MaPhongSpinner(this@ActivityCapNhatKhachThue, phongApiService)
-                    binding.spinnerSuaNguoiDung.adapter = spinnerAdapter
+//                    val spinnerAdapter = MaPhongSpinner(this@ActivityCapNhatKhachThue, phongApiService)
+//                    binding.spinnerSuaNguoiDung.adapter = spinnerAdapter
                     binding.spinnerSuaNguoiDung.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             maPhong = listPhong[position].ma_phong

@@ -3,13 +3,14 @@ package ct07n.hcmact.quanlynhatro_nhom15.model
 data class NguoiDung(
     val ma_nguoi_dung:String,
     val ho_ten_nguoi_dung:String,
-    val cccd:String,
     val nam_sinh:String,
     val sdt_nguoi_dung:String,
+    val cccd:String,
     val que_quan:String,
     val ma_phong:String,
-    val trang_thai_chu_hop_dong:Int,
-    val trang_thai_o:Int
+    val trang_thai_o:Int,
+    val trang_thai_chu_hop_dong:Int
+
     ) :java.io.Serializable {
     companion object{
         const val TB_NAME="nguoi_dung"
