@@ -30,16 +30,9 @@ import java.util.*
 
 class ActivityCapNhatHopDong : AppCompatActivity() {
     private lateinit var binding: ActivityCapNhatHopDongBinding
-    var thoiHan = 0
     var mYear = 0
     var mMonth = 0
     var mDay = 0
-    var mYearNow = 0
-    var mMonthNow = 0
-    var mDayNow = 0
-    var mYear2 = 0
-    var mMonth2 = 0
-    var mDay2 = 0
     var mDateNgayO: Any? = null
     var listND = listOf<NguoiDung>()
     private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
@@ -177,7 +170,7 @@ class ActivityCapNhatHopDong : AppCompatActivity() {
             ngay_lap_hop_dong = simpleDateFormatNow.format(Date())
         )
         val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
-        hopDongApiService.updateHopDong(hopDong, hopDongNew)
+        hopDongApiService.updateHopDong(hopDong.ma_hop_dong, hopDongNew)
             .enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {

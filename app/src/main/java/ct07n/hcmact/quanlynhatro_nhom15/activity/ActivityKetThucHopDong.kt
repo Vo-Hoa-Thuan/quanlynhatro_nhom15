@@ -23,12 +23,9 @@ import java.util.*
 
 class ActivityKetThucHopDong : AppCompatActivity() {
     private lateinit var binding: ActivityKetThucHopDongBinding
-    private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-    private val simpleDateFormatNow = SimpleDateFormat("yyyy-MM-dd")
     private var mYearNow = 0
     private var mDayNow = 0
     private var mMonthNow = 0
-    private var tienDenBuHopDong = 100
     private var tienCocDenBu = 0
     private var tongTien = 0
 
@@ -138,11 +135,6 @@ class ActivityKetThucHopDong : AppCompatActivity() {
     }
 
     private fun updateHD(hopDong: HopDong) {
-        val hopDongNew = hopDong.copy(
-            ngay_hop_dong = chuyenDinhDangNgayChuan(binding.tvNgayKetThucHopDong.text.toString()),
-            trang_thai_hop_dong = 0,
-            hieu_luc_hop_dong = 0
-        )
         val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
         hopDongApiService.deleteHopDong(hopDong.ma_hop_dong).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -178,7 +170,7 @@ class ActivityKetThucHopDong : AppCompatActivity() {
 
     private fun loadNguoiDungTrongPhong(maPhong: String) {
         val nguoiDungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
-        nguoiDungApiService.deleteByRoomId(maPhong).enqueue(object : Callback<Void> {
+        nguoiDungApiService.updatetrangthainguoidungdao(maPhong).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     thongBaoThanhCong("Kết thúc hợp đồng thành công")
@@ -214,17 +206,6 @@ class ActivityKetThucHopDong : AppCompatActivity() {
         val sdfNgay = SimpleDateFormat("yyyy-MM-dd")
         val objDateNgayO = sdfNgay.parse(ngay)
         return DateFormat.format("dd/MM/yyyy", objDateNgayO).toString()
-    }
-
-    private fun chuyenDinhDangNgayChuan(text: String): String {
-        return try {
-            val sdf = SimpleDateFormat("dd/MM/yyyy")
-            val objDate = sdf.parse(text.trim())
-            DateFormat.format("yyyy-MM-dd", objDate).toString()
-        } catch (e: ParseException) {
-            e.printStackTrace()
-            ""
-        }
     }
 
     private fun thongBaoLoi(loi: String) {
