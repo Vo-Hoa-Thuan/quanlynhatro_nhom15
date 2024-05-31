@@ -102,9 +102,12 @@ class HopDongPhongHetHanViewHolder(
         phongApiService.getTenPhongById(hopDong.ma_phong).enqueue(object : Callback<PhongApiService.TenPhongResponse> {
             override fun onResponse(call: Call<PhongApiService.TenPhongResponse>, response: Response<PhongApiService.TenPhongResponse>) {
                 if (response.isSuccessful) {
-                    dialog.tvChiTietHDTenPhong.text = "Phòng: " + response.body()
+                    val tenPhongResponse = response.body()
+                    val tenPhong = tenPhongResponse?.ten_phong ?: "N/A"
+                    dialog.tvChiTietHDTenPhong.text = tenPhong
                 } else {
-                    showToast("Không thể tải tên phòng")
+                    binding.tvDanhSachHopDongTenPhong.text = "N/A"
+                    Log.e(ContentValues.TAG, "Failed to retrieve room name: ${response.code()}")
                 }
             }
 
@@ -118,7 +121,7 @@ class HopDongPhongHetHanViewHolder(
                 if (response.isSuccessful) {
                     val tenNguoiResponse = response.body()
                     val tenNguoiDung = tenNguoiResponse?.ho_ten_nguoi_dung ?: "N/A"
-                    binding.tvDanhSachHopDongTenThanhVien.text = "Họ và tên: $tenNguoiDung"
+                    dialog.tvChiTietHDTenNguoiDung.text = "Họ và tên: $tenNguoiDung"
                 } else {
                     binding.tvDanhSachHopDongTenThanhVien.text = "N/A"
                     showToast("Không thể tải tên người dùng")
@@ -126,6 +129,7 @@ class HopDongPhongHetHanViewHolder(
             }
 
             override fun onFailure(call: Call<HopdongApiService.TenNguoiResponse>, t: Throwable) {
+                binding.tvDanhSachHopDongTenThanhVien.text = "N/A"
                 showToast("Lỗi kết nối: ${t.message}")
             }
         })
@@ -136,11 +140,7 @@ class HopDongPhongHetHanViewHolder(
             tvChiTietHDNgayHopDong.text = "Ngày kết thúc: ${chuyenDinhDangNgay(hopDong.ngay_hop_dong)}"
             tvNgayLapHopDong.text = "Ngày lập hợp đồng: ${chuyenDinhDangNgay(hopDong.ngay_lap_hop_dong)}"
             tvChiTietHDTienCoc.text = "Tiền cọc: ${hopDong.tien_coc}"
-            tvChiTietHDTrangThai.text = when (hopDong.trang_thai_hop_dong) {
-                1 -> "Tình trạng hợp đồng: Còn hợp đồng"
-                0 -> "Tình trạng hợp đồng: Hết hợp đồng"
-                else -> "Tình trạng hợp đồng: Sắp hết hợp đồng"
-            }
+            tvChiTietHDTrangThai.text = ""
         }
     }
 

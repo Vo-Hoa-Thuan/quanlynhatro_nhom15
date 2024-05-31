@@ -51,7 +51,7 @@ class NguoiThueViewHolder(
         binding.tvMaNguoiDung.text = nguoiDung.ma_nguoi_dung
         binding.tvSDT.text = "SĐT: ${nguoiDung.sdt_nguoi_dung}"
         binding.tvTenNguoiThue.text = "Họ tên: ${nguoiDung.ho_ten_nguoi_dung}"
-        binding.edTrangThaiO.isChecked = nguoiDung.trang_thai_o == 0
+        binding.edTrangThaiO.isChecked = nguoiDung.trang_thai_o == 1
 
         // Sử dụng API để lấy mã người đang ở
         nguoidungApiService.getMaNguoiDangOByMaPhong(nguoiDung.ma_phong).enqueue(object : Callback<NguoidungApiService.MaNguoiDangOResponse> {

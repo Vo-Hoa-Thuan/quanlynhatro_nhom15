@@ -63,9 +63,6 @@ class ActivityCapNhatHopDong : AppCompatActivity() {
         maKhu = srf.getString(MA_KHU_KEY, "")!!
         hopDong = intent.getSerializableExtra("hopDong") as HopDong
 
-        loadNguoiDung(hopDong.ma_phong)
-        loadTenPhong(hopDong.ma_phong)
-
         binding.edNgayBatDauO.setText(chuyenDinhDangNgay(hopDong.ngay_o))
         binding.edThoiHan.setText(hopDong.thoi_han.toString())
         binding.edNgayHetHan.setText(chuyenDinhDangNgay(hopDong.ngay_hop_dong))
@@ -154,13 +151,6 @@ class ActivityCapNhatHopDong : AppCompatActivity() {
             return
         }
 
-        try {
-            val ngayBatDauO = simpleDateFormat.parse(binding.edNgayBatDauO.text.toString())
-            val ngayHetHan = simpleDateFormat.parse(binding.edNgayHetHan.text.toString())
-        } catch (ex: Exception) {
-            Toast.makeText(this, "Ngày không đúng định dạng(dd/MM/yyyy)", Toast.LENGTH_SHORT).show()
-            return
-        }
         val thoiHan = binding.edThoiHan.text.toString().toInt()
         val ngayO = chuyenDinhDangNgay(binding.edNgayBatDauO.text.toString())
 
@@ -180,7 +170,7 @@ class ActivityCapNhatHopDong : AppCompatActivity() {
             thoi_han = thoiHan,
             ngay_o = ngayO,
             ngay_hop_dong = ngayHopDong,
-            tien_coc = binding.edTienCoc.text.toString().toInt(),
+            tien_coc = hopDong.tien_coc,
             anh_hop_dong = "default_image_link",
             trang_thai_hop_dong = if (binding.chkTrangThai.isChecked) 1 else 0,
             hieu_luc_hop_dong = 1,
@@ -203,23 +193,23 @@ class ActivityCapNhatHopDong : AppCompatActivity() {
             })
     }
 
-    private fun loadNguoiDung(maPhong: String) {
-        val NguoidungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
-        NguoidungApiService.getNguoiDungByMaPhong(maPhong).enqueue(object : Callback<List<NguoiDung>> {
-            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
-                if (response.isSuccessful) {
-                    listND = response.body() ?: listOf()
-                    setupSpinner()
-                } else {
-                    showError("Không thể tải người dùng")
-                }
-            }
-
-            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
-                showError("Lỗi kết nối nguoi dung: ${t.message}")
-            }
-        })
-    }
+//    private fun loadNguoiDung(maPhong: String) {
+//        val NguoidungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
+//        NguoidungApiService.getNguoiDungByMaPhong(maPhong).enqueue(object : Callback<List<NguoiDung>> {
+//            override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
+//                if (response.isSuccessful) {
+//                    listND = response.body() ?: listOf()
+//                    setupSpinner()
+//                } else {
+//                    showError("Không thể tải người dùng")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<NguoiDung>>, t: Throwable) {
+//                showError("Lỗi kết nối nguoi dung: ${t.message}")
+//            }
+//        })
+//    }
 
     private fun loadTenPhong(maPhong: String) {
         val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
