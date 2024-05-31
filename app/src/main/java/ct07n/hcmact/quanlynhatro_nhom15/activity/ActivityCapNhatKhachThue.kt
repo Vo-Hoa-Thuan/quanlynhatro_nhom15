@@ -88,7 +88,6 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<Phong>>, t: Throwable) {
                 Log.e("API_ERROR", "Failed to fetch rooms due to: ${t.message}", t)
-                Toast.makeText(this@ActivityCapNhatKhachThue, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -112,7 +111,6 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
 
             override fun onFailure(call: Call<NguoidungApiService.MaNguoiDangOResponse>, t: Throwable) {
                 Log.d("ActivityCapNhatKhachThue", "Failed to get current resident ID due to: ${t.message}")
-                thongBaoLoi("Lỗi kết nối: ${t.message}")
             }
         })
 
@@ -122,13 +120,13 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
                                 Log.d("ActivityCapNhatKhachThue", "Updated tenant status successfully")
-                                thongBaoXoa("Xác nhận xoá?")
                                 nguoidungApiService.getListNguoiDungByMaPhong(maPhongCu).enqueue(object : Callback<List<NguoiDung>> {
                                     override fun onResponse(call: Call<List<NguoiDung>>, response: Response<List<NguoiDung>>) {
                                         if (response.isSuccessful) {
                                             val listNguoiDung = response.body() ?: emptyList()
                                             Log.d("ActivityCapNhatKhachThue", "Fetched tenant list: $listNguoiDung")
                                             if (listNguoiDung.isEmpty()) {
+
                                                 phongApiService.updateTrangThaiPhongThanhDaO(maPhongCu).enqueue(object : Callback<Void> {
                                                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                                         if (response.isSuccessful) {
@@ -136,6 +134,21 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                                                         } else {
                                                             Log.d("ActivityCapNhatKhachThue", "Failed to update room status: ${response.message()}")
                                                             thongBaoLoi("Cập nhật trạng thái phòng không thành công")
+                                                        }
+                                                    }
+
+                                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                                        Log.d("ActivityCapNhatKhachThue", "Failed to update room status due to: ${t.message}")
+                                                        thongBaoLoi("Lỗi kết nối: ${t.message}")
+                                                    }
+                                                })
+
+                                                phongApiService.deleteHopDongIfPhongMaZero(maPhongCu).enqueue(object : Callback<Void> {
+                                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                                        if (response.isSuccessful) {
+                                                            Log.d("ActivityCapNhatKhachThue", "Updated hop dong status successfully")
+                                                        } else {
+                                                            thongBaoLoi("Lỗi")
                                                         }
                                                     }
 
@@ -160,6 +173,8 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                                 Log.d("ActivityCapNhatKhachThue", "Failed to update tenant status: ${response.message()}")
                                 thongBaoLoi("Cập nhật không thành công")
                             }
+                        thongBaoXoa("Đã xóa thành công")
+                        finish()
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {

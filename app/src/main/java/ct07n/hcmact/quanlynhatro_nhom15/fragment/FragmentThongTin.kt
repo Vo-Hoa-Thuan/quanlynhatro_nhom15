@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import ct07n.hcmact.quanlynhatro_nhom15.activity.THONG_TIN_PHONG
-import ct07n.hcmact.quanlynhatro_nhom15.adapter.*
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.FILE_NAME
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.MA_KHU_KEY
+import ct07n.hcmact.quanlynhatro_nhom15.adapter.MA_PHONG_TRONG_CHI_TIET_PHONG
 import ct07n.hcmact.quanlynhatro_nhom15.api.NguoidungApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
@@ -21,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
 import android.text.Editable
+import androidx.appcompat.app.AppCompatActivity
 
 class FragmentThongTin : Fragment() {
     private lateinit var binding: FragmentThongTinBinding
@@ -96,7 +99,10 @@ class FragmentThongTin : Fragment() {
                 phongApiService.xoaPhongById(maPhong).enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
-                            activity?.finish()
+                            val srf = activity?.getSharedPreferences(ct07n.hcmact.quanlynhatro_nhom15.activity.FILE_NAME, AppCompatActivity.MODE_PRIVATE)
+                            maKhu = srf?.getString(ct07n.hcmact.quanlynhatro_nhom15.activity.MA_KHU_KEY, "").orEmpty()
+                            Log.d("FragmentPhongDaO", "Retrieved maKhu: $maKhu")
+                            updateRoomCount()
                         } else {
                             thongBaoLoi("Không thể xoá phòng có thông tin!!!")
                         }
@@ -144,6 +150,25 @@ class FragmentThongTin : Fragment() {
         }
     }
 
+    private fun updateRoomCount() {
+        val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
+        val call = phongApiService.updateSoLuongPhongByMaKhu(maKhu)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    thongBaoThanhCong("Xóa phòng thành công")
+                } else {
+                    thongBaoLoi("Cập nhật số lượng phòng thất bại")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                thongBaoLoi("Lỗi khi cập nhật số lượng phòng: ${t.message}")
+            }
+        })
+    }
+
+
     private fun thongBaoLoi(loi: String) {
         val builder = AlertDialog.Builder(binding.root.context)
         builder.setTitle("Thông Báo Lỗi")
@@ -152,5 +177,15 @@ class FragmentThongTin : Fragment() {
             dialog.cancel()
         })
         builder.show()
+    }
+
+    private fun thongBaoThanhCong(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Thành công")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { _, _ ->
+            activity?.finish()
+        }
+        val dialog = builder.create()
     }
 }

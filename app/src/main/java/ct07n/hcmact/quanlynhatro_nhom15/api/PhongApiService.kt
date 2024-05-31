@@ -50,6 +50,9 @@ interface PhongApiService {
 
     @PUT("phong/update-so-luong-phong/{maKhu}")
     fun updateSoLuongPhongByMaKhu(@Path("maKhu") maKhu: String): Call<Void>
+
+    @DELETE("hopdong/if-phong-zero/{maPhong}")
+    fun deleteHopDongIfPhongMaZero(@Path("maPhong") maPhong: String): Call<Void>
     companion object {
         fun getInstance(): PhongApiService {
             return RetrofitClient.instance.create(PhongApiService::class.java)
