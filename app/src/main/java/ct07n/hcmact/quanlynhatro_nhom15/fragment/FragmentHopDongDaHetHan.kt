@@ -32,12 +32,12 @@ class FragmentHopDongDaHetHan : Fragment() {
     private var listHopDongHetHan = listOf<HopDong>()
     private var maKhu = ""
     private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+    private val simpleDateFormatNow = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentHopDongDaHetHanBinding.inflate(inflater, container, false)
 
         val srf = binding.root.context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
@@ -121,14 +121,15 @@ class FragmentHopDongDaHetHan : Fragment() {
             thongBaoLoi("Ngày kết thúc không đúng định dạng(dd/MM/yyyy)")
             return
         }
-
+        val ngayKetThucMoiFormatted = convertToMySQLDateFormat(ngayKetThucMoi)
         val hopDongNew = hopDong.copy(
+            ngay_o = simpleDateFormatNow.format(Date()),
             thoi_han = thoiHanMoi.toInt(),
-            ngay_hop_dong = chuyenDinhDang(Editable.Factory.getInstance().newEditable(ngayKetThucMoi)),
+            ngay_hop_dong = ngayKetThucMoiFormatted,
             trang_thai_hop_dong = 1
         )
         val hopDongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
-        hopDongApiService.updateHopDong(hopDong, hopDongNew).enqueue(object : Callback<Void> {
+        hopDongApiService.updateHopDong(hopDong.ma_hop_dong, hopDongNew).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     thongBaoThanhCong("Gia hạn hợp đồng thành công!", builder)
@@ -142,17 +143,11 @@ class FragmentHopDongDaHetHan : Fragment() {
             }
         })
     }
-
-    private fun chuyenDinhDang(text: Editable?): String {
-        var ngayChuanDinhDang = ""
-        try {
-            val sdf = SimpleDateFormat("dd/MM/yyyy")
-            val objDate = sdf.parse(text.toString().trim())
-            ngayChuanDinhDang = DateFormat.format("yyyy-MM-dd", objDate) as String
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return ngayChuanDinhDang
+    private fun convertToMySQLDateFormat(dateString: String): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = sdf.parse(dateString)
+        val sdfMySQL = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return sdfMySQL.format(date)
     }
 
     private fun chuyenDinhDangNgay(ngay: String): String {
