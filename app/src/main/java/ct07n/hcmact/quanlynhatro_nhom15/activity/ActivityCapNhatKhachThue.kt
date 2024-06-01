@@ -101,7 +101,7 @@ class ActivityCapNhatKhachThue : AppCompatActivity() {
                     } else {
                         binding.spinnerSuaNguoiDung.visibility = View.VISIBLE
                         binding.spinnerSuaNguoiDung.isEnabled = false
-                        binding.chkTrangThaiKhachThue.isEnabled = false
+                        binding.chkTrangThaiKhachThue.isEnabled = true
                     }
                 } else {
                     Log.d("ActivityCapNhatKhachThue", "Failed to get current resident ID: ${response.message()}")
