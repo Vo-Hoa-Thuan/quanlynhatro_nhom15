@@ -29,14 +29,7 @@
              android:layout_marginRight="10dp"
              android:background="@drawable/boder_nen"
              style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-             >
-             <com.google.android.material.textfield.TextInputEditText
-                 android:id="@+id/edTenPhongTro"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:hint="Tên phòng trọ"
-                 />
-         </com.google.android.material.textfield.TextInputLayout>
+             />
          <com.google.android.material.textfield.TextInputLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

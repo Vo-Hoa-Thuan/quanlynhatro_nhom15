@@ -80,6 +80,7 @@ class FragmentTatCaPhong : Fragment() {
                     val phongList = response.body() ?: emptyList()
                     listPhong.clear()
                     listPhong.addAll(phongList)
+                    listPhong.sortBy { it.ten_phong }
                     phongAdapter.notifyDataSetChanged()
                 } else {
                     Log.e("FragmentTatCaPhong", "Không thể nhận danh sách phòng từ máy chủ.")

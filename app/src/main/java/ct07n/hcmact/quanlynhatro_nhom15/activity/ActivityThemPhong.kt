@@ -37,25 +37,7 @@ class ActivityThemPhong : AppCompatActivity() {
         maKhu = srf.getString(MA_KHU_KEY, "")!!
 
         binding.btnLuuThemPhong.setOnClickListener {
-            val tenMacDinh = binding.edTenPhongTro.text.toString()
-            val dienTich = binding.edDienTichPhong.text.toString().toIntOrNull() ?: 0
-            val giaThue = binding.edGiaThue.text.toString().toLongOrNull() ?: 0
-            val soNguoiToiDa = binding.edSoNguoiOToiDa.text.toString().toIntOrNull() ?: 0
-
-            val phong = Phong(
-                ma_phong = maPhong,
-                ten_phong = tenMacDinh,
-                dien_tich = dienTich,
-                gia_thue = giaThue,
-                so_nguoi_o = soNguoiToiDa,
-                trang_thai_phong = 0,
-                ma_khu_tro = maKhu
-            )
-
-            // Gọi API để thêm phòng mới
-            addNewRoom(phong)
-            // Gọi API để đếm tổng số phòng trong khu trọ
-
+            fetchRoomCountAndAddRoom()
         }
 
         binding.btnHuyThemPhong.setOnClickListener {
@@ -67,7 +49,40 @@ class ActivityThemPhong : AppCompatActivity() {
         showCancelConfirmationDialog()
     }
 
-    private fun addNewRoom(phong: Phong) {
+    private fun fetchRoomCountAndAddRoom() {
+        val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
+        phongApiService.demSoPhong(maKhu).enqueue(object : Callback<PhongApiService.SoPhongResponse> {
+            override fun onResponse(call: Call<PhongApiService.SoPhongResponse>, response: Response<PhongApiService.SoPhongResponse>) {
+                if (response.isSuccessful) {
+                    val roomCount = response.body()?.soPhong ?: 0
+                    addNewRoom(roomCount + 1)
+                } else {
+                    thongBaoLoi("Không thể lấy tổng số phòng.")
+                }
+            }
+
+            override fun onFailure(call: Call<PhongApiService.SoPhongResponse>, t: Throwable) {
+                thongBaoLoi("Lỗi khi lấy tổng số phòng: ${t.message}")
+            }
+        })
+    }
+
+    private fun addNewRoom(nextRoomNumber: Int) {
+        val tenMacDinh = "Phòng $nextRoomNumber"
+        val dienTich = binding.edDienTichPhong.text.toString().toIntOrNull() ?: 0
+        val giaThue = binding.edGiaThue.text.toString().toLongOrNull() ?: 0
+        val soNguoiToiDa = binding.edSoNguoiOToiDa.text.toString().toIntOrNull() ?: 0
+
+        val phong = Phong(
+            ma_phong = maPhong,
+            ten_phong = tenMacDinh,
+            dien_tich = dienTich,
+            gia_thue = giaThue,
+            so_nguoi_o = soNguoiToiDa,
+            trang_thai_phong = 0,
+            ma_khu_tro = maKhu
+        )
+
         val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
         val call = phongApiService.insertPhong(phong)
         call.enqueue(object : Callback<Void> {
@@ -84,7 +99,6 @@ class ActivityThemPhong : AppCompatActivity() {
             }
         })
     }
-
 
     private fun updateRoomCount() {
         val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)

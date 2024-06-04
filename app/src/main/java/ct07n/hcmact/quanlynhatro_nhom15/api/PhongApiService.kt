@@ -43,8 +43,9 @@ interface PhongApiService {
     fun getAllInPhongDaOMaKhu(@Path("maKhu") maKhu: String): Call<List<Phong>>
 
     @GET("phong/dem/{maKhu}")
-    fun demSoPhong(@Path("maKhu") maKhu: String): Call<Int>
+    fun demSoPhong(@Path("maKhu") maKhu: String): Call<SoPhongResponse>
 
+    data class SoPhongResponse(val soPhong: Int)
     @GET("phong")
     fun getAllPhong(): Call<List<Phong>>
 

@@ -83,6 +83,7 @@ class FragmentPhongDaO : Fragment() {
                     val phongList = response.body()?.filter { it.trang_thai_phong == 1 } ?: emptyList()
                     listPhong.clear()
                     listPhong.addAll(phongList)
+                    listPhong.sortBy { it.ten_phong }
                     phongAdapter.notifyDataSetChanged()
                 } else {
                     Log.e("FragmentPhongDaO", "Không thể nhận danh sách phòng từ máy chủ.")

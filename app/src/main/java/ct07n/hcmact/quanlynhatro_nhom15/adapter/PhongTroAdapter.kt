@@ -28,7 +28,7 @@ class PhongTroViewHolder(private val context: Context, private val binding: Layo
     private val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
     private val nguoidungApiService = RetrofitClient.instance.create(NguoidungApiService::class.java)
 
-    fun bind(phong: Phong) {
+    fun bind(phong: Phong, position: Int) {
         binding.tvTenPhong.text = phong.ten_phong
         binding.tvGiaThue.text = phong.gia_thue.toString()
         binding.tvGioiHanNguoiO.text = if (phong.so_nguoi_o == 0) {
@@ -73,6 +73,7 @@ class PhongTroViewHolder(private val context: Context, private val binding: Layo
 
 
 class PhongTroAdapter(private val context: Context, private val listPhong: List<Phong>) : RecyclerView.Adapter<PhongTroViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhongTroViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = LayoutItemPhongBinding.inflate(inflater, parent, false)
@@ -83,6 +84,6 @@ class PhongTroAdapter(private val context: Context, private val listPhong: List<
 
     override fun onBindViewHolder(holder: PhongTroViewHolder, position: Int) {
         val phong = listPhong[position]
-        holder.bind(phong)
+        holder.bind(phong, position)
     }
 }

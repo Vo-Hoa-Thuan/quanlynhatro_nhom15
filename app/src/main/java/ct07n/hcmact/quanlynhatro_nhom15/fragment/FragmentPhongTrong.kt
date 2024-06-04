@@ -81,6 +81,7 @@ class FragmentPhongTrong : Fragment() {
                     val phongList = response.body()?.filter { it.trang_thai_phong == 0 } ?: emptyList()
                     listPhong.clear()
                     listPhong.addAll(phongList)
+                    listPhong.sortBy { it.ten_phong }
                     phongAdapter.notifyDataSetChanged()
                 } else {
                     Log.e("FragmentPhongTrong", "Failed to retrieve the list of empty rooms from the server.")

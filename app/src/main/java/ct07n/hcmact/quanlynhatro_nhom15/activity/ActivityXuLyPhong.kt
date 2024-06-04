@@ -49,9 +49,6 @@ class ActivityXuLyPhong : AppCompatActivity() {
                     tab.text = "Còn hạn"
                 }
                 1 -> {
-                    tab.text = "Sắp hết hạn"
-                }
-                2 -> {
                     tab.text = "Hết hạn"
                 }
                 else -> tab.text = "Còn hạn"
