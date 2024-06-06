@@ -166,12 +166,12 @@
                <TextView
                    style="@style/textView_tabLayout"
                    android:paddingTop="10dp"
-                   android:text="Doanh thu"
+                   android:text="Tiền cọc"
                    />
                <TextView
                    style="@style/textView_tabLayout"
                    android:textSize="18dp"
-                   android:hint="Tổng số tiền theo tháng"
+                   android:hint="Tổng số tiền cọc của khu"
 
                    />
            </LinearLayout>

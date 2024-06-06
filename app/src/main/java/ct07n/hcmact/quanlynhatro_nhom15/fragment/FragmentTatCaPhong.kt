@@ -80,9 +80,10 @@ class FragmentTatCaPhong : Fragment() {
                     val phongList = response.body() ?: emptyList()
                     listPhong.clear()
                     listPhong.addAll(phongList)
-                    listPhong.sortBy { it.ten_phong }
+                    listPhong.sortWith(compareBy({ extractNumber(it.ten_phong) }, { it.ten_phong }))
                     phongAdapter.notifyDataSetChanged()
-                } else {
+
+            } else {
                     Log.e("FragmentTatCaPhong", "Không thể nhận danh sách phòng từ máy chủ.")
                 }
             }
@@ -91,6 +92,9 @@ class FragmentTatCaPhong : Fragment() {
                 Log.e("FragmentTatCaPhong", "Lỗi khi gọi API: ${t.message}")
             }
         })
+    }
+    private fun extractNumber(tenPhong: String): Int {
+        return Regex("\\d+").find(tenPhong)?.value?.toInt() ?: Int.MAX_VALUE
     }
 
     override fun onDestroyView() {

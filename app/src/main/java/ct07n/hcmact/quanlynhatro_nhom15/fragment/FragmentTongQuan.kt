@@ -140,5 +140,11 @@ class FragmentTongQuan : Fragment() {
             val intent = Intent(context, ActivityPhongDangThue::class.java)
             startActivity(intent)
         }
+        binding.doanhThu.setOnClickListener {
+        val intent = Intent(context, ActivityDoanhThu::class.java)
+        startActivity(intent)
+        }
     }
+
+
 }

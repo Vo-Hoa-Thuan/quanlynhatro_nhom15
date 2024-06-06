@@ -1,6 +1,6 @@
 package ct07n.hcmact.quanlynhatro_nhom15.activity
 
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,42 +10,38 @@ import ct07n.hcmact.quanlynhatro_nhom15.adapter.PhongTroAdapter
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.ActivityPhongDangThueBinding
-import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityManHinhChinhChuTro
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class ActivityPhongDangThue : AppCompatActivity() {
     private lateinit var binding: ActivityPhongDangThueBinding
-    var listPhongDangThue= listOf<Phong>()
-    var maKhu=""
+    private var listPhongDangThue = mutableListOf<Phong>()
+    private var maKhu = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhongDangThueBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.tbPhongDangThue
         setSupportActionBar(binding.tbPhongDangThue)
-        val ab = getSupportActionBar()
-        ab?.setHomeAsUpIndicator(R.drawable.black_left)
-        ab?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.black_left)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
-        val srf=this?.getSharedPreferences(FILE_NAME, AppCompatActivity.MODE_PRIVATE)
-        maKhu=srf?.getString(MA_KHU_KEY, "")!!
+        val sharedPreferences = getSharedPreferences(FILE_NAME, AppCompatActivity.MODE_PRIVATE)
+        maKhu = sharedPreferences.getString(MA_KHU_KEY, "") ?: ""
+
         reload()
     }
 
-    fun chuyenActivity(){
-        val intent = Intent(this@ActivityPhongDangThue, ActivityManHinhChinhChuTro::class.java)
-        startActivity(intent)
-        finish()
-    }
-    override fun  onOptionsItemSelected(item : MenuItem): Boolean {
-        val id : Int = item.getItemId();
-        if (id==android.R.id.home)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             finish()
-        return super.onOptionsItemSelected(item);
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun reload() {
@@ -54,10 +50,15 @@ class ActivityPhongDangThue : AppCompatActivity() {
         phongApiService.getAllInPhongByMaKhu(maKhu).enqueue(object : Callback<List<Phong>> {
             override fun onResponse(call: Call<List<Phong>>, response: Response<List<Phong>>) {
                 if (response.isSuccessful) {
-                    listPhongDangThue = response.body()?.filter { it.trang_thai_phong == 1 } ?: listOf()
-                    val phongTroAdapter = PhongTroAdapter(this@ActivityPhongDangThue, listPhongDangThue)
-                    binding.recyclerDanhSachPhongDangThue.adapter = phongTroAdapter
-                    binding.recyclerDanhSachPhongDangThue.layoutManager = LinearLayoutManager(this@ActivityPhongDangThue)
+                    listPhongDangThue.clear()
+                    response.body()?.let { phongList ->
+                        listPhongDangThue.addAll(phongList.filter { it.trang_thai_phong == 1 })
+                        listPhongDangThue.sortWith(compareBy({ extractNumber(it.ten_phong) }, { it.ten_phong }))
+                        binding.recyclerDanhSachPhongDangThue.apply {
+                            adapter = PhongTroAdapter(this@ActivityPhongDangThue, listPhongDangThue)
+                            layoutManager = LinearLayoutManager(this@ActivityPhongDangThue)
+                        }
+                    }
                 }
             }
 
@@ -65,5 +66,9 @@ class ActivityPhongDangThue : AppCompatActivity() {
                 // Xử lý lỗi nếu có
             }
         })
+    }
+
+    private fun extractNumber(tenPhong: String): Int {
+        return Regex("\\d+").find(tenPhong)?.value?.toInt() ?: Int.MAX_VALUE
     }
 }
