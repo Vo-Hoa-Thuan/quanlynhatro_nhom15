@@ -45,74 +45,46 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
             val giaThue = binding.edGiaThue.text.toString().trim()
             val dienTich = binding.edDienTichPhong.text.toString().trim()
 
-            if (tenPhong.isEmpty()) {
-                if (soNguoiO.isEmpty() || giaThue.isEmpty() || dienTich.isEmpty()) {
-                    showErrorMessage("Vui lòng nhập đủ thông tin!!!")
-                } else {
-                    // Nếu tên phòng không được nhập, nhưng các thông tin khác được nhập đầy đủ
-                    // thì tự động tạo tên phòng và tạo các phòng
-                    val trangThaiPhong = 0
-                    repeat(soPhongTro) { index ->
-                        val idPhong = UUID.randomUUID().toString()
-                        val newPhong = Phong(idPhong, "Phòng ${index + 1}", dienTich.toInt(),giaThue.toLong(),  soNguoiO.toInt(),  trangThaiPhong, maKhuTro)
-                        insertNewPhong(newPhong)
-                    }
-                }
+            if (soNguoiO.isEmpty() || giaThue.isEmpty() || dienTich.isEmpty()) {
+                showErrorMessage("Vui lòng nhập đủ thông tin!!!")
             } else {
-                if (soNguoiO.isEmpty() || giaThue.isEmpty() || dienTich.isEmpty()) {
-                    showErrorMessage("Vui lòng nhập đủ thông tin!!!")
-                } else {
-                    // Nếu tên phòng được nhập, kiểm tra các thông tin khác và tạo các phòng
-                    val trangThaiPhong = 0
-                    repeat(soPhongTro) { index ->
-                        val idPhong = UUID.randomUUID().toString()
-                        val newPhong = Phong(idPhong, tenPhong, soNguoiO.toInt(), giaThue.toLong(), dienTich.toInt(), trangThaiPhong, maKhuTro)
-                        insertNewPhong(newPhong)
-                    }
+                val trangThaiPhong = 0
+                repeat(soPhongTro) { index ->
+                    val idPhong = UUID.randomUUID().toString()
+                    val roomName = if (tenPhong.isNotEmpty()) tenPhong else "Phòng ${index + 1}"
+                    val newPhong = Phong(
+                        idPhong,
+                        roomName,
+                        dienTich.toInt(),
+                        giaThue.toLong(),
+                        soNguoiO.toInt(),
+                        trangThaiPhong,
+                        maKhuTro
+                    )
+                    insertNewPhong(newPhong)
                 }
             }
         }
     }
-
-    private fun validateInput(): Boolean {
-        val tenPhong = binding.edTenPhongTro.text.toString()
-        val soNguoiO = binding.edSoNguoiToiDa.text.toString()
-        val giaThue = binding.edGiaThue.text.toString()
-        val dienTich = binding.edDienTichPhong.text.toString()
-
-        return if (tenPhong.isBlank()) {
-            false // Trả về false nếu tên phòng không được nhập
-        } else {
-            // Kiểm tra các trường thông tin khác và trả về true nếu tất cả được nhập
-            soNguoiO.isNotBlank() && giaThue.isNotBlank() && dienTich.isNotBlank()
-        }
-    }
-
 
     private fun insertNewPhong(phong: Phong) {
         val call = phongApiService.insertPhong(phong)
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    // Log để kiểm tra gửi yêu cầu thành công hay không
                     Log.d("ActivityTaoPhongKhiThemKhu", "Gửi yêu cầu thành công")
-
-// Chuyển hướng người dùng đ
+                    // Chuyển hướng người dùng đến màn hình chính chủ trọ
                     val intent = Intent(this@ActivityTaoPhongKhiThemKhu, ActivityManHinhChinhChuTro::class.java)
                     startActivity(intent)
                     finishAffinity()
                 } else {
                     showErrorMessage("Lưu thất bại")
-
-                    // Log để hiển thị thông báo lỗi từ máy chủ
                     Log.e("ActivityTaoPhongKhiThemKhu", "Lỗi từ máy chủ: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 showErrorMessage("Có lỗi xảy ra khi kết nối đến máy chủ")
-
-                // Log để hiển thị thông báo lỗi từ exception
                 Log.e("ActivityTaoPhongKhiThemKhu", "Exception khi kết nối đến máy chủ: ${t.message}")
             }
         })
@@ -125,6 +97,4 @@ class ActivityTaoPhongKhiThemKhu : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
-
-
 }

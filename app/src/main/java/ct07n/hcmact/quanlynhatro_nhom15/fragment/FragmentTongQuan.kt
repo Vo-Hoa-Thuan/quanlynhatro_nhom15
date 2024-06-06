@@ -142,13 +142,18 @@ class FragmentTongQuan : Fragment() {
 
 // Thiết lập sự kiện cho các nút
     private fun setupButtonClickListeners() {
-    binding.phongTrong.setOnClickListener {
-        val intent = Intent(context, ActivityPhongTrong::class.java)
+        binding.phongTrong.setOnClickListener {
+            val intent = Intent(context, ActivityPhongTrong::class.java)
+            startActivity(intent)
+        }
+        binding.phongDangChoThue.setOnClickListener {
+            val intent = Intent(context, ActivityPhongDangThue::class.java)
+            startActivity(intent)
+        }
+        binding.doanhThu.setOnClickListener {
+        val intent = Intent(context, ActivityDoanhThu::class.java)
         startActivity(intent)
+        }
     }
-    binding.phongDangChoThue.setOnClickListener {
-        val intent = Intent(context, ActivityPhongDangThue::class.java)
-        startActivity(intent)
-    }
-    }
+
 }

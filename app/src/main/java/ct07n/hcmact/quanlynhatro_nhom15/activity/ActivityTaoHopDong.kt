@@ -63,11 +63,15 @@ class ActivityTaoHopDong : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     listPhongChuaCoHopDong.clear()
                     listPhongChuaCoHopDong.addAll(response.body()!!)
-                    listPhongChuaCoHopDong.sortBy { it.ten_phong }
+                    listPhongChuaCoHopDong.sortWith(compareBy({ extractNumber(it.ten_phong) }, { it.ten_phong }))
                     setupRecyclerView()
                 } else {
                     Toast.makeText(this@ActivityTaoHopDong, "Failed to retrieve data", Toast.LENGTH_SHORT).show()
                 }
+            }
+
+            private fun extractNumber(tenPhong: String): Int {
+                return Regex("\\d+").find(tenPhong)?.value?.toInt() ?: Int.MAX_VALUE
             }
 
             override fun onFailure(call: Call<List<Phong>>, t: Throwable) {

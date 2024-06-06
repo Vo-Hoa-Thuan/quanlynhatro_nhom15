@@ -81,12 +81,17 @@ class FragmentPhongTrong : Fragment() {
                     val phongList = response.body()?.filter { it.trang_thai_phong == 0 } ?: emptyList()
                     listPhong.clear()
                     listPhong.addAll(phongList)
-                    listPhong.sortBy { it.ten_phong }
+                    listPhong.sortWith(compareBy({ extractNumber(it.ten_phong) }, { it.ten_phong }))
                     phongAdapter.notifyDataSetChanged()
                 } else {
                     Log.e("FragmentPhongTrong", "Failed to retrieve the list of empty rooms from the server.")
                 }
             }
+
+            private fun extractNumber(tenPhong: String): Int {
+                return Regex("\\d+").find(tenPhong)?.value?.toInt() ?: Int.MAX_VALUE
+            }
+
 
             override fun onFailure(call: Call<List<Phong>>, t: Throwable) {
                 Log.e("FragmentPhongTrong", "Failed to make API call: ${t.message}")
