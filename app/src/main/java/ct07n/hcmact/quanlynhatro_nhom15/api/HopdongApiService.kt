@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 interface HopdongApiService {
     @GET("hopDong")
-    fun getAllHopDong(): Call<List<HopDong>>
+    fun getAllHopDongByMaKhu(@Path("id") id: String): Call<List<HopDong>>
 
     @POST("hopDong")
     fun insertHopDong(@Body hopDong: HopDong): Call<Void>

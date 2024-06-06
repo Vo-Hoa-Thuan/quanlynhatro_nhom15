@@ -63,6 +63,7 @@ class ActivityTaoHopDong : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     listPhongChuaCoHopDong.clear()
                     listPhongChuaCoHopDong.addAll(response.body()!!)
+                    listPhongChuaCoHopDong.sortBy { it.ten_phong }
                     setupRecyclerView()
                 } else {
                     Toast.makeText(this@ActivityTaoHopDong, "Failed to retrieve data", Toast.LENGTH_SHORT).show()
@@ -85,6 +86,7 @@ class ActivityTaoHopDong : AppCompatActivity() {
                 }
                 intent.putExtras(bundle)
                 startActivity(intent)
+
             }
         })
         binding.rcyPhongTrongCanTaoHopDong.layoutManager = LinearLayoutManager(this)

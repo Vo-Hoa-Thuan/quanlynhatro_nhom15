@@ -21,25 +21,6 @@ class ActivityXuLyPhong : AppCompatActivity() {
         val ab = getSupportActionBar()
         ab?.setHomeAsUpIndicator(R.drawable.black_left)
         ab?.setDisplayHomeAsUpEnabled(true)
-        //==================================
-
-        /*val srf = binding.root.context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        maKhu = srf.getString(MA_KHU_KEY, "")!!
-        listHopDongSapHetHan = HopDongDao(this@ActivityXuLyPhong).getHopDongSapHetHanByMaKhu(maKhu,0)
-        //listHopDong=HopDongDao(this@ActivityDanhSachHopDong).getAllInHopDong()
-        val hopDongAdapter= HopDongPhongHetHanAdapter(listHopDongSapHetHan,object :HopDongInterface{
-            override fun OnClickHopDong(pos: Int) {
-                val intent = Intent(this@ActivityXuLyPhong,ActivityKetThucHopDong::class.java)
-                //val bundle = Bundle()
-//                bundle.putString("tenPhong",listPhongChuaCoHopDong[pos].ten_phong)
-//                bundle.putString("maPhong",listPhongChuaCoHopDong[pos].ma_phong)
-                 //intent.putExtras(bundle)
-                startActivity(intent)
-            }
-
-        })
-        binding.recyclerXuLyPhong.adapter = hopDongAdapter
-        binding.recyclerXuLyPhong.layoutManager= LinearLayoutManager(this)*/
 
         val adapter = ViewpagerDanhSachHopDongXuLyAdapter(supportFragmentManager, lifecycle)
         binding.viewpagerDanhSachHopDong.adapter = adapter

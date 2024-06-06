@@ -15,10 +15,19 @@ import ct07n.hcmact.quanlynhatro_nhom15.activity.ActivityPhongTrong
 import ct07n.hcmact.quanlynhatro_nhom15.activity.*
 import ct07n.hcmact.quanlynhatro_nhom15.api.KhuTroApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.PhongApiService
+import ct07n.hcmact.quanlynhatro_nhom15.api.HopdongApiService
 import ct07n.hcmact.quanlynhatro_nhom15.api.RetrofitClient
 import ct07n.hcmact.quanlynhatro_nhom15.databinding.TablayoutTongquanBinding
 import ct07n.hcmact.quanlynhatro_nhom15.model.KhuTro
 import ct07n.hcmact.quanlynhatro_nhom15.model.Phong
+import ct07n.hcmact.quanlynhatro_nhom15.model.HopDong
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import ct07n.hcmact.quanlynhatro_nhom15.R
+import android.widget.TextView
+import android.widget.Button
+
+
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +41,7 @@ class FragmentTongQuan : Fragment() {
     private var listKhuTro = listOf<KhuTro>()
     private val phongApiService = RetrofitClient.instance.create(PhongApiService::class.java)
     private val khuTroApiService = RetrofitClient.instance.create(KhuTroApiService::class.java)
+    private val hopdongApiService = RetrofitClient.instance.create(HopdongApiService::class.java)
     private lateinit var maKhuListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     override fun onCreateView(
@@ -132,13 +142,13 @@ class FragmentTongQuan : Fragment() {
 
 // Thiết lập sự kiện cho các nút
     private fun setupButtonClickListeners() {
-        binding.phongTrong.setOnClickListener {
-            val intent = Intent(context, ActivityPhongTrong::class.java)
-            startActivity(intent)
-        }
-        binding.phongDangChoThue.setOnClickListener {
-            val intent = Intent(context, ActivityPhongDangThue::class.java)
-            startActivity(intent)
-        }
+    binding.phongTrong.setOnClickListener {
+        val intent = Intent(context, ActivityPhongTrong::class.java)
+        startActivity(intent)
+    }
+    binding.phongDangChoThue.setOnClickListener {
+        val intent = Intent(context, ActivityPhongDangThue::class.java)
+        startActivity(intent)
+    }
     }
 }
